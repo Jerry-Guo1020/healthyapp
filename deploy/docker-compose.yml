@@ -44,7 +44,7 @@ services:
     mem_limit: 900m
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m"
+      JAVA_OPTS: "-Xms128m -Xmx512m -XX:-UseZGC -XX:+UseG1GC -XX:MaxMetaspaceSize=256m"
       SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_URL: jdbc:mysql://mysql:3306/ry-vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
       SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_USERNAME: root
       SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_PASSWORD: ${MYSQL_ROOT_PASSWORD}

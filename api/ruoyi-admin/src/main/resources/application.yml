@@ -116,6 +116,8 @@ security:
     - /*/api-docs
     - /*/api-docs/**
     - /warm-flow-ui/config
+    # 膳衡 App 端接口使用自有 JWT 鉴权，不走 sa-token
+    - /app/v1/**
 
 # 多租户配置
 tenant:
