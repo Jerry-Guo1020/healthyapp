@@ -13,6 +13,10 @@ env:
   # GHCR 要求镜像命名空间全小写
   IMAGE: jerry-guo1020/healthyapp/web
 
+# 部署说明：GitHub 海外 runner 无法直连国内服务器 22 端口(SSH 握手被重置)，
+# 故采用「服务器主动拉取」模型：服务器 cron 定时 docker compose pull && up。
+# CI 只负责构建并推送镜像到 GHCR（镜像为 public，服务器可匿名拉取）。
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -39,29 +43,3 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ github.sha }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    steps:
-      - name: 检查部署配置是否就绪
-        id: check
-        shell: bash
-        run: |
-          if [ -n "${{ secrets.SERVER_HOST }}" ] && [ -n "${{ secrets.SERVER_SSH_KEY }}" ]; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: 部署到服务器
-        if: steps.check.outputs.ready == 'true'
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd /opt/shanheng
-            docker compose pull web
-            docker compose up -d web
