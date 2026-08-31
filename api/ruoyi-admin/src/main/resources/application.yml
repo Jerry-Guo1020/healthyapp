@@ -262,3 +262,11 @@ warm-flow:
   node-tooltip: true
   # 默认Authorization，如果有多个token，用逗号分隔
   token-name: ${sa-token.token-name},clientid
+
+--- # 膳衡 App 配置
+shanheng:
+  jwt:
+    # JWT 签名密钥（生产环境务必替换为高强度随机串）
+    secret: shanheng-dev-jwt-secret-change-me-in-prod
+    # Token 有效期（分钟），默认 7 天
+    expire-minutes: 10080
