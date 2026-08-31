@@ -47,3 +47,9 @@ docker compose up -d
 | App 端接口 | http://服务器IP/app/v1/ |
 
 生产环境务必挂 443 + HTTPS 证书。
+## CI 镜像
+
+由 GitHub Actions 自动构建并推送（GHCR）：
+
+- 后端：`ghcr.io/jerry-guo1020/healthyapp/api:latest`
+- 前端：`ghcr.io/jerry-guo1020/healthyapp/web:latest`
