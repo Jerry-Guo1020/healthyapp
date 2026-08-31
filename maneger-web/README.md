@@ -81,3 +81,5 @@ npm run build:prod
 | ![输入图片说明](https://foruda.gitee.com/images/1680078982294090567/b31c343d_1766278.png '屏幕截图') | ![输入图片说明](https://foruda.gitee.com/images/1680079000642440444/77ca82a9_1766278.png '屏幕截图') |
 | ![输入图片说明](https://foruda.gitee.com/images/1680079020995074177/03b7d52e_1766278.png '屏幕截图') | ![输入图片说明](https://foruda.gitee.com/images/1680079039367822173/76811806_1766278.png '屏幕截图') |
 | ![输入图片说明](https://foruda.gitee.com/images/1680079274333484664/4dfdc7c0_1766278.png '屏幕截图') | ![输入图片说明](https://foruda.gitee.com/images/1680079290467458224/d6715fcf_1766278.png '屏幕截图') |
+
+> 膳衡 App 管理端，由 GitHub Actions 构建镜像 `ghcr.io/jerry-guo1020/healthyapp/web`。
