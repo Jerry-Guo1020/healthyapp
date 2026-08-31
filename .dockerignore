@@ -1,0 +1,13 @@
+# 前端镜像构建上下文缩小：只保留 maneger-web 与 deploy/nginx.conf 所需
+.git
+.gitignore
+node_modules
+**/node_modules
+api
+doc
+tasks
+deploy/docker-compose.yml
+deploy/.env
+deploy/.env.example
+deploy/README.md
+*.log

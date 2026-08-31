@@ -2,7 +2,8 @@
 # 构建上下文：仓库根目录（docker build -f maneger-web/Dockerfile .）
 FROM node:20-alpine AS build
 WORKDIR /app
-RUN corepack enable
+# 固定 pnpm 版本，避免 corepack 依赖 packageManager 字段而失败
+RUN npm install -g pnpm@9.14.2
 COPY maneger-web/ ./
 RUN pnpm install && pnpm build:prod
 
