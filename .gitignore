@@ -1,0 +1,50 @@
+# ===== OS / IDE =====
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# ===== Java / Maven =====
+target/
+*.class
+*.war
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+
+# ===== Node =====
+node_modules/
+dist/
+.npm/
+.pnpm-store/
+*.tsbuildinfo
+
+# ===== HarmonyOS / ArkTS =====
+oh_modules/
+build/
+.hvigor/
+.preview/
+local.properties
+*.hap
+*.har
+*.app
+.cxx/
+
+# ===== 环境变量（密钥不下库） =====
+.env
+.env.*
+*.local
+application-local.yml
+deploy/.env
+
+# ===== 日志与临时文件 =====
+logs/
+*.log
+*.tmp
+.tmp/
+
+# ===== 数据库导出 =====
+*.sql.gz
+dump/
