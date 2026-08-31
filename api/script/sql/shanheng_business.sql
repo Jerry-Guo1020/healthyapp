@@ -6,7 +6,7 @@
 
 -- 用户表
 CREATE TABLE `sh_user` (
-  `id`              BIGINT       NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `id`              BIGINT       NOT NULL COMMENT '用户ID',
   `phone`           VARCHAR(20)  DEFAULT NULL COMMENT '手机号（登录账号，唯一）',
   `nickname`        VARCHAR(50)  DEFAULT NULL COMMENT '昵称',
   `avatar_url`      VARCHAR(255) DEFAULT NULL COMMENT '头像URL',
@@ -24,7 +24,7 @@ CREATE TABLE `sh_user` (
 
 -- 第三方账号绑定表
 CREATE TABLE `sh_user_auth` (
-  `id`          BIGINT      NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`          BIGINT      NOT NULL COMMENT 'ID',
   `user_id`     BIGINT      NOT NULL COMMENT '用户ID',
   `auth_type`   VARCHAR(20) NOT NULL COMMENT '认证类型 HUAWEI/PHONE',
   `open_id`     VARCHAR(64) DEFAULT NULL COMMENT '华为OpenID',
@@ -43,7 +43,7 @@ CREATE TABLE `sh_user_auth` (
 
 -- 用户偏好表
 CREATE TABLE `sh_user_preference` (
-  `id`                 BIGINT        NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`                 BIGINT        NOT NULL COMMENT 'ID',
   `user_id`            BIGINT        NOT NULL COMMENT '用户ID',
   `taste_preference`   JSON          DEFAULT NULL COMMENT '口味偏好 {"spicy":0,"light":1}',
   `cuisine_preference` JSON          DEFAULT NULL COMMENT '菜系偏好 ["粤菜","川菜"]',
@@ -58,7 +58,7 @@ CREATE TABLE `sh_user_preference` (
 
 -- 用户忌口表
 CREATE TABLE `sh_user_avoid` (
-  `id`          BIGINT      NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`          BIGINT      NOT NULL COMMENT 'ID',
   `user_id`     BIGINT      NOT NULL COMMENT '用户ID',
   `avoid_type`  VARCHAR(20) NOT NULL COMMENT '类型 ALLERGEN过敏原/AVOID忌口',
   `item_name`   VARCHAR(50) NOT NULL COMMENT '忌口项 如花生/辣椒/麸质',
@@ -69,7 +69,7 @@ CREATE TABLE `sh_user_avoid` (
 
 -- 健康授权记录表
 CREATE TABLE `sh_health_auth` (
-  `id`             BIGINT   NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`             BIGINT   NOT NULL COMMENT 'ID',
   `user_id`        BIGINT   NOT NULL COMMENT '用户ID',
   `auth_scope`     JSON     DEFAULT NULL COMMENT '授权范围 ["STEPS","SLEEP","HEART_RATE","STRESS"]',
   `status`         TINYINT  DEFAULT 1 COMMENT '状态 0已撤销 1已授权',
@@ -83,7 +83,7 @@ CREATE TABLE `sh_health_auth` (
 
 -- 用户健康摘要表（只存摘要，不存原始数据）
 CREATE TABLE `sh_health_summary` (
-  `id`                  BIGINT   NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`                  BIGINT   NOT NULL COMMENT 'ID',
   `user_id`             BIGINT   NOT NULL COMMENT '用户ID',
   `summary_date`        DATE     NOT NULL COMMENT '摘要日期',
   `today_steps`         INT      DEFAULT NULL COMMENT '今日步数',
@@ -101,7 +101,7 @@ CREATE TABLE `sh_health_summary` (
 
 -- 菜品分类表
 CREATE TABLE `sh_category` (
-  `id`          BIGINT      NOT NULL AUTO_INCREMENT COMMENT '分类ID',
+  `id`          BIGINT      NOT NULL COMMENT '分类ID',
   `parent_id`   BIGINT      DEFAULT 0 COMMENT '父分类ID 0为顶级',
   `name`        VARCHAR(50) NOT NULL COMMENT '分类名称',
   `type`        VARCHAR(20) DEFAULT NULL COMMENT '类型 MEAL餐次/CUISINE菜系/STAPLE主食/HEALTH健康/TASTE口味',
@@ -122,7 +122,7 @@ CREATE TABLE `sh_category` (
 
 -- 标签表
 CREATE TABLE `sh_tag` (
-  `id`          BIGINT      NOT NULL AUTO_INCREMENT COMMENT '标签ID',
+  `id`          BIGINT      NOT NULL COMMENT '标签ID',
   `name`        VARCHAR(50) NOT NULL COMMENT '标签名 如 高蛋白/清淡/辣味',
   `type`        VARCHAR(20) DEFAULT 'HEALTH' COMMENT '类型 HEALTH健康/TASTE口味/SCENE场景',
   `sort`        INT         DEFAULT 0 COMMENT '排序值',
@@ -138,7 +138,7 @@ CREATE TABLE `sh_tag` (
 
 -- 菜品表
 CREATE TABLE `sh_dish` (
-  `id`              BIGINT        NOT NULL AUTO_INCREMENT COMMENT '菜品ID',
+  `id`              BIGINT        NOT NULL COMMENT '菜品ID',
   `name`            VARCHAR(100)  NOT NULL COMMENT '菜品名称',
   `category_id`     BIGINT        NOT NULL COMMENT '主分类ID',
   `description`     TEXT          COMMENT '描述',
@@ -170,7 +170,7 @@ CREATE TABLE `sh_dish` (
 
 -- 菜品标签关系表
 CREATE TABLE `sh_dish_tag` (
-  `id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`      BIGINT NOT NULL COMMENT 'ID',
   `dish_id` BIGINT NOT NULL COMMENT '菜品ID',
   `tag_id`  BIGINT NOT NULL COMMENT '标签ID',
   PRIMARY KEY (`id`),
@@ -180,7 +180,7 @@ CREATE TABLE `sh_dish_tag` (
 
 -- 推荐规则表
 CREATE TABLE `sh_recommendation_rule` (
-  `id`              BIGINT       NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`              BIGINT       NOT NULL COMMENT 'ID',
   `rule_name`       VARCHAR(100) NOT NULL COMMENT '规则名',
   `rule_key`        VARCHAR(50)  NOT NULL COMMENT '规则标识',
   `conditions`      JSON         NOT NULL COMMENT '触发条件 {"sleep_duration_min":{"lt":360}}',
@@ -201,7 +201,7 @@ CREATE TABLE `sh_recommendation_rule` (
 
 -- 推荐记录表
 CREATE TABLE `sh_recommendation_record` (
-  `id`             BIGINT   NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`             BIGINT   NOT NULL COMMENT 'ID',
   `user_id`        BIGINT   NOT NULL COMMENT '用户ID',
   `scene`          VARCHAR(20) DEFAULT NULL COMMENT '场景 早餐/午餐/晚餐/下午茶/宵夜',
   `input_snapshot` JSON     DEFAULT NULL COMMENT '输入快照(场景/偏好/健康摘要)',
@@ -214,7 +214,7 @@ CREATE TABLE `sh_recommendation_record` (
 
 -- 推荐反馈表
 CREATE TABLE `sh_recommend_feedback` (
-  `id`            BIGINT      NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`            BIGINT      NOT NULL COMMENT 'ID',
   `record_id`     BIGINT      NOT NULL COMMENT '推荐记录ID',
   `user_id`       BIGINT      NOT NULL COMMENT '用户ID',
   `dish_id`       BIGINT      NOT NULL COMMENT '菜品ID',
@@ -228,7 +228,7 @@ CREATE TABLE `sh_recommend_feedback` (
 
 -- 收藏表
 CREATE TABLE `sh_favorite` (
-  `id`          BIGINT   NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`          BIGINT   NOT NULL COMMENT 'ID',
   `user_id`     BIGINT   NOT NULL COMMENT '用户ID',
   `dish_id`     BIGINT   NOT NULL COMMENT '菜品ID',
   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '收藏时间',
@@ -238,7 +238,7 @@ CREATE TABLE `sh_favorite` (
 
 -- 浏览历史表
 CREATE TABLE `sh_browse_history` (
-  `id`          BIGINT   NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id`          BIGINT   NOT NULL COMMENT 'ID',
   `user_id`     BIGINT   DEFAULT NULL COMMENT '用户ID(游客为空)',
   `device_id`   VARCHAR(64) DEFAULT NULL COMMENT '游客设备标识',
   `dish_id`     BIGINT   NOT NULL COMMENT '菜品ID',

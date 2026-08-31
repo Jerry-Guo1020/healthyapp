@@ -344,6 +344,13 @@
                 <version>${revision}</version>
             </dependency>
 
+            <!--  膳衡 App 业务模块  -->
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>shanheng-app</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.dromara</groupId>
                 <artifactId>ruoyi-demo</artifactId>

@@ -17,4 +17,20 @@ import java.util.Date;
 @TableName("sh_favorite")
 public class ShFavorite implements Serializable {
 
- 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /** ID */
+    @TableId(value = "id")
+    private Long id;
+
+    /** 用户ID */
+    private Long userId;
+
+    /** 菜品ID */
+    private Long dishId;
+
+    /** 收藏时间 */
+    private Date createTime;
+
+}
