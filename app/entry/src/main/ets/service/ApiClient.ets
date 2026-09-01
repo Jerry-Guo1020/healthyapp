@@ -25,6 +25,10 @@ export class ApiClient {
     return ApiClient.request<T>(http.RequestMethod.DELETE, path, null);
   }
 
+  static async put<T>(path: string, body: object | null): Promise<ApiResult<T>> {
+    return ApiClient.request<T>(http.RequestMethod.PUT, path, body);
+  }
+
   private static async request<T>(method: http.RequestMethod, path: string,
     body: object | null): Promise<ApiResult<T>> {
     const client = http.createHttp();

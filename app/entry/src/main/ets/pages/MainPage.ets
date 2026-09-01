@@ -1,4 +1,5 @@
 import { HomeTab } from './tab/HomeTab';
+import { HealthTab } from './tab/HealthTab';
 import { FavoriteTab } from './tab/FavoriteTab';
 import { HistoryTab } from './tab/HistoryTab';
 import { ProfileTab } from './tab/ProfileTab';
@@ -32,17 +33,22 @@ struct MainPage {
       .tabBar(this.tabBar('首页', '🏠'))
 
       TabContent() {
-        FavoriteTab({ active: this.currentIndex === 1 })
+        HealthTab({ active: this.currentIndex === 1 })
+      }
+      .tabBar(this.tabBar('健康', '🫀'))
+
+      TabContent() {
+        FavoriteTab({ active: this.currentIndex === 2 })
       }
       .tabBar(this.tabBar('收藏', '❤️'))
 
       TabContent() {
-        HistoryTab({ active: this.currentIndex === 2 })
+        HistoryTab({ active: this.currentIndex === 3 })
       }
       .tabBar(this.tabBar('历史', '🕒'))
 
       TabContent() {
-        ProfileTab({ active: this.currentIndex === 3 })
+        ProfileTab({ active: this.currentIndex === 4 })
       }
       .tabBar(this.tabBar('我的', '👤'))
     }

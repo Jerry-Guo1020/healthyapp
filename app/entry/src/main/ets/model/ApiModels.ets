@@ -72,3 +72,65 @@ export class BrowseHistoryVo {
   browseTime: string = '';
   dish: DishVo = new DishVo();
 }
+
+// 健康摘要
+export class HealthSummaryVo {
+  id: string = '';
+  summaryDate: string = '';
+  todaySteps: number = 0;
+  sleepDurationMin: number = 0;
+  sleepQualityScore: number = 0;
+  restingHeartRate: number = 0;
+  stressLevel: number = 0;
+  activityLevel: number = 0;
+  source: string = '';
+  dataTime: string = '';
+}
+
+// 健康授权状态
+export class HealthAuthVo {
+  authScope: string[] = [];
+  status: number = 0;
+  authorizeTime: string = '';
+}
+
+// 用户偏好
+export class PreferenceVo {
+  tastePreference: string = '';
+  cuisinePreference: string = '';
+  budgetMin: number = 0;
+  budgetMax: number = 0;
+  healthGoal: string = '';
+}
+
+// 忌口
+export class AvoidVo {
+  id: string = '';
+  avoidType: string = '';
+  itemName: string = '';
+}
+
+// 推荐项
+export class RecommendItemVo {
+  dish: DishVo = new DishVo();
+  reason: string = '';
+  healthAdvice: string = '';
+  score: number = 0;
+}
+
+// 推荐结果
+export class RecommendResultVo {
+  recordId: string = '';
+  recommendations: RecommendItemVo[] = [];
+  todayReminder: string = '';
+  healthSummary: HealthSummaryVo | null = null;
+}
+
+// 推荐记录
+export class RecommendationRecordVo {
+  id: string = '';
+  scene: string = '';
+  dishIds: string = '';
+  reason: string = '';
+  createTime: string = '';
+}
