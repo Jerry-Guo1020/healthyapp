@@ -55,6 +55,9 @@ export class DishVo {
   priceMax: number = 0;
   favoriteCount: number = 0;
   viewCount: number = 0;
+  protein: number = 0;
+  fat: number = 0;
+  carbs: number = 0;
   tags: string[] = [];
   favorite: boolean = false;
 }

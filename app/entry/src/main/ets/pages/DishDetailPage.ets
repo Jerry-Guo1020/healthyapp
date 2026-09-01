@@ -220,6 +220,27 @@ struct DishDetailPage {
               }
               .width('100%')
               .margin({ top: 12 })
+
+              if (this.dish.protein > 0 || this.dish.fat > 0 || this.dish.carbs > 0) {
+                Row({ space: 10 }) {
+                  this.metricItem('蛋白质', `${this.dish.protein} g`)
+                  this.metricItem('脂肪', `${this.dish.fat} g`)
+                  this.metricItem('碳水', `${this.dish.carbs} g`)
+                }
+                .width('100%')
+                .margin({ top: 12 })
+                Text('* 三大营养素为每100g含量')
+                  .fontSize(10)
+                  .fontColor('#BBBBBB')
+                  .margin({ top: 6 })
+                  .width('100%')
+              } else {
+                Text('三大营养素暂未录入，可在管理端「联网补全」')
+                  .fontSize(11)
+                  .fontColor('#BBBBBB')
+                  .margin({ top: 10 })
+                  .width('100%')
+              }
             }
             .width('92%')
             .padding(16)

@@ -64,6 +64,15 @@ public class DishVo {
     /** 浏览数 */
     private Integer viewCount;
 
+    /** 蛋白质(g/100g) */
+    private BigDecimal protein;
+
+    /** 脂肪(g/100g) */
+    private BigDecimal fat;
+
+    /** 碳水化合物(g/100g) */
+    private BigDecimal carbs;
+
     /** 标签名列表 */
     private List<String> tags;
 

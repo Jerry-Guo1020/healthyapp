@@ -272,3 +272,6 @@ shanheng:
     secret: shanheng-dev-jwt-secret-change-me-in-prod
     # Token 有效期（分钟），默认 7 天
     expire-minutes: 10080
+  usda:
+    # USDA FoodData Central 免费 API Key（默认 DEMO_KEY 可测试，正式使用请注册并配置环境变量 SHANHENG_USDA_API_KEY）
+    api-key: ${SHANHENG_USDA_API_KEY:DEMO_KEY}

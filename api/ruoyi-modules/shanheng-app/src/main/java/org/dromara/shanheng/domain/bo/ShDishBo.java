@@ -1,36 +1,31 @@
-package org.dromara.shanheng.entity;
+package org.dromara.shanheng.domain.bo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 
-import java.io.Serial;
 import java.math.BigDecimal;
 
 /**
- * 菜品对象 sh_dish
+ * 菜品业务对象（管理端新增/编辑/查询）
  *
  * @author shanheng
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("sh_dish")
-public class ShDish extends BaseEntity {
+public class ShDishBo extends BaseEntity {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    /** 菜品ID */
-    @TableId(value = "id")
+    /** 菜品ID（新增时不传，雪花生成） */
     private Long id;
 
     /** 菜品名称 */
+    @NotBlank(message = "菜品名称不能为空")
     private String name;
 
     /** 主分类ID */
+    @NotNull(message = "主分类不能为空")
     private Long categoryId;
 
     /** 描述 */
@@ -39,7 +34,7 @@ public class ShDish extends BaseEntity {
     /** 封面图URL(R2) */
     private String coverUrl;
 
-    /** 食材 JSON */
+    /** 食材 JSON 数组字符串 */
     private String ingredients;
 
     /** 热量(kcal/份) */
@@ -66,18 +61,6 @@ public class ShDish extends BaseEntity {
     /** 价格上限 */
     private BigDecimal priceMax;
 
-    /** 状态 0草稿 1上架 2下架 3待审核 */
-    private Integer status;
-
-    /** 浏览数 */
-    private Integer viewCount;
-
-    /** 收藏数 */
-    private Integer favoriteCount;
-
-    /** 被推荐次数 */
-    private Integer recommendCount;
-
     /** 蛋白质(g/100g) */
     private BigDecimal protein;
 
@@ -87,8 +70,7 @@ public class ShDish extends BaseEntity {
     /** 碳水化合物(g/100g) */
     private BigDecimal carbs;
 
-    /** 逻辑删除 0否 1是 */
-    @TableLogic
-    private Integer deleted;
+    /** 状态 0草稿 1上架 2下架 3待审核 */
+    private Integer status;
 
 }
