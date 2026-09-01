@@ -6,7 +6,7 @@ import { UserSession } from '../../common/UserSession';
  */
 @Component
 export struct ProfileTab {
-  @StorageProp('mainTabIndex') @Watch('onTabChange') tabIndex: number = 0;
+  @Prop @Watch('onActiveChange') active: boolean = false;
   @State nickname: string = '未登录';
   @State isGuest: number = 1;
 
@@ -14,8 +14,8 @@ export struct ProfileTab {
     this.refreshUser();
   }
 
-  onTabChange(): void {
-    if (this.tabIndex === 3) {
+  onActiveChange(): void {
+    if (this.active) {
       this.refreshUser();
     }
   }

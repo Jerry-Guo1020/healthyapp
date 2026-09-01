@@ -1,7 +1,7 @@
-import { BizApi, DishQuery } from '../service/BizApi';
-import { CategoryVo, DishVo } from '../model/ApiModels';
-import { DishCard } from '../components/DishCard';
-import { EmptyView } from '../components/EmptyView';
+import { BizApi, DishQuery } from '../../service/BizApi';
+import { CategoryVo, DishVo } from '../../model/ApiModels';
+import { DishCard } from '../../components/DishCard';
+import { EmptyView } from '../../components/EmptyView';
 
 /**
  * 首页 Tab：搜索 + 分类 + 菜品列表

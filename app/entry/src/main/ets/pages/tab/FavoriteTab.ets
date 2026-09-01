@@ -1,14 +1,14 @@
-import { BizApi } from '../service/BizApi';
-import { DishVo } from '../model/ApiModels';
-import { DishCard } from '../components/DishCard';
-import { EmptyView } from '../components/EmptyView';
+import { BizApi } from '../../service/BizApi';
+import { DishVo } from '../../model/ApiModels';
+import { DishCard } from '../../components/DishCard';
+import { EmptyView } from '../../components/EmptyView';
 
 /**
  * 收藏 Tab
  */
 @Component
 export struct FavoriteTab {
-  @StorageProp('mainTabIndex') @Watch('onTabChange') tabIndex: number = 0;
+  @Prop @Watch('onActiveChange') active: boolean = false;
   @State dishes: DishVo[] = [];
   @State loading: boolean = false;
   @State finished: boolean = false;
@@ -19,8 +19,8 @@ export struct FavoriteTab {
     this.refresh();
   }
 
-  onTabChange(): void {
-    if (this.tabIndex === 1) {
+  onActiveChange(): void {
+    if (this.active) {
       this.refresh();
     }
   }

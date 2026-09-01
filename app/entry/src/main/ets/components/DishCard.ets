@@ -1,12 +1,18 @@
 import { router } from '@kit.ArkUI';
 import { DishVo } from '../model/ApiModels';
 
+// 详情页路由参数（ArkTS 禁止无类型对象字面量）
+class DishDetailParams {
+  dishId: string = '';
+  name: string = '';
+}
+
 /**
  * 菜品卡片（首页 / 收藏 / 历史 复用）
  */
 @Component
 export struct DishCard {
-  @Prop dish: DishVo;
+  @Prop dish: DishVo = new DishVo();
 
   private priceText(): string {
     if (this.dish.priceMin <= 0 && this.dish.priceMax <= 0) {
@@ -16,9 +22,12 @@ export struct DishCard {
   }
 
   private openDetail(): void {
+    const p = new DishDetailParams();
+    p.dishId = this.dish.id;
+    p.name = this.dish.name;
     router.pushUrl({
       url: 'pages/DishDetailPage',
-      params: { dishId: this.dish.id, name: this.dish.name }
+      params: p
     });
   }
 

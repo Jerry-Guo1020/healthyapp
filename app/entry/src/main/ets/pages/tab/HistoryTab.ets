@@ -1,14 +1,14 @@
-import { BizApi } from '../service/BizApi';
-import { BrowseHistoryVo } from '../model/ApiModels';
-import { DishCard } from '../components/DishCard';
-import { EmptyView } from '../components/EmptyView';
+import { BizApi } from '../../service/BizApi';
+import { BrowseHistoryVo } from '../../model/ApiModels';
+import { DishCard } from '../../components/DishCard';
+import { EmptyView } from '../../components/EmptyView';
 
 /**
  * 浏览历史 Tab
  */
 @Component
 export struct HistoryTab {
-  @StorageProp('mainTabIndex') @Watch('onTabChange') tabIndex: number = 0;
+  @Prop @Watch('onActiveChange') active: boolean = false;
   @State list: BrowseHistoryVo[] = [];
   @State loading: boolean = false;
   @State finished: boolean = false;
@@ -19,8 +19,8 @@ export struct HistoryTab {
     this.refresh();
   }
 
-  onTabChange(): void {
-    if (this.tabIndex === 2) {
+  onActiveChange(): void {
+    if (this.active) {
       this.refresh();
     }
   }

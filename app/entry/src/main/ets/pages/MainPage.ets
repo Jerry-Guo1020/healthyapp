@@ -2,7 +2,6 @@ import { HomeTab } from './tab/HomeTab';
 import { FavoriteTab } from './tab/FavoriteTab';
 import { HistoryTab } from './tab/HistoryTab';
 import { ProfileTab } from './tab/ProfileTab';
-import { AppStorage } from '@kit.ArkUI';
 
 /**
  * 主框架：底部四 Tab（首页 / 收藏 / 历史 / 我的）
@@ -11,10 +10,6 @@ import { AppStorage } from '@kit.ArkUI';
 @Component
 struct MainPage {
   @State currentIndex: number = 0;
-
-  aboutToAppear(): void {
-    AppStorage.setOrCreate('mainTabIndex', 0);
-  }
 
   @Builder
   tabBar(title: string, icon: string) {
@@ -37,23 +32,22 @@ struct MainPage {
       .tabBar(this.tabBar('首页', '🏠'))
 
       TabContent() {
-        FavoriteTab()
+        FavoriteTab({ active: this.currentIndex === 1 })
       }
       .tabBar(this.tabBar('收藏', '❤️'))
 
       TabContent() {
-        HistoryTab()
+        HistoryTab({ active: this.currentIndex === 2 })
       }
       .tabBar(this.tabBar('历史', '🕒'))
 
       TabContent() {
-        ProfileTab()
+        ProfileTab({ active: this.currentIndex === 3 })
       }
       .tabBar(this.tabBar('我的', '👤'))
     }
     .onChange((index: number) => {
       this.currentIndex = index;
-      AppStorage.setOrCreate('mainTabIndex', index);
     })
     .scrollable(false)
     .barBackgroundColor('#FFFFFF')
