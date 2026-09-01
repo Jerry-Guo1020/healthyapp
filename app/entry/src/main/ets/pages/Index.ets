@@ -1,23 +1,33 @@
+import { router } from '@kit.ArkUI';
+import { UserSession } from '../common/UserSession';
+
+/**
+ * 启动页：恢复会话并路由分发
+ */
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello World';
+  aboutToAppear(): void {
+    UserSession.init();
+    setTimeout(() => {
+      const target: string = UserSession.isLogin() ? 'pages/MainPage' : 'pages/LoginPage';
+      router.replaceUrl({ url: target });
+    }, 600);
+  }
 
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('HelloWorld')
-        .fontSize($r('app.float.page_text_font_size'))
+    Column() {
+      Text('膳衡')
+        .fontSize(44)
         .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
-        .onClick(() => {
-          this.message = 'Welcome';
-        })
+        .fontColor('#00A86B')
+      Text('健康饮食 · 膳衡相伴')
+        .fontSize(14)
+        .fontColor('#999999')
+        .margin({ top: 14 })
     }
-    .height('100%')
     .width('100%')
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
   }
 }
