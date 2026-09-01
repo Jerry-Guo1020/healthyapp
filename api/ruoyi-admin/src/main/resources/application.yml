@@ -21,8 +21,8 @@ server:
       worker: 256
 
 captcha:
-  # 是否启用验证码校验
-  enable: true
+  # 是否启用验证码校验（已关闭：前端改为 Cloudflare Turnstile 人机认证）
+  enable: false
   # 验证码类型 math 数组计算 char 字符验证
   type: math
   # 数字验证码位数
