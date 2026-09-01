@@ -28,21 +28,6 @@
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>
-      <el-form-item v-if="captchaEnabled" prop="code">
-        <el-input
-          v-model="loginForm.code"
-          size="large"
-          auto-complete="off"
-          :placeholder="proxy.$t('login.code')"
-          style="width: 63%"
-          @keyup.enter="handleLogin"
-        >
-          <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
-        </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" class="login-code-img" @click="getCode" />
-        </div>
-      </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin: 0 0 25px 0">{{ proxy.$t('login.rememberPassword') }}</el-checkbox>
       <el-form-item style="float: right">
         <el-button circle :title="proxy.$t('login.social.wechat')" @click="doSocialLogin('wechat')">
@@ -79,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCodeImg, getTenantList } from '@/api/login';
+import { getTenantList } from '@/api/login';
 import { authRouterUrl } from '@/api/system/social/auth';
 import { useUserStore } from '@/store/modules/user';
 import { LoginData, TenantVO } from '@/api/types';
@@ -98,22 +83,16 @@ const loginForm = ref<LoginData>({
   tenantId: '000000',
   username: 'admin',
   password: 'admin123',
-  rememberMe: false,
-  code: '',
-  uuid: ''
+  rememberMe: false
 } as LoginData);
 
 const loginRules: ElFormRules = {
   tenantId: [{ required: true, trigger: 'blur', message: t('login.rule.tenantId.required') }],
   username: [{ required: true, trigger: 'blur', message: t('login.rule.username.required') }],
-  password: [{ required: true, trigger: 'blur', message: t('login.rule.password.required') }],
-  code: [{ required: true, trigger: 'change', message: t('login.rule.code.required') }]
+  password: [{ required: true, trigger: 'blur', message: t('login.rule.password.required') }]
 };
 
-const codeUrl = ref('');
 const loading = ref(false);
-// 验证码开关
-const captchaEnabled = ref(true);
 // 租户开关
 const tenantEnabled = ref(true);
 
@@ -157,30 +136,11 @@ const handleLogin = () => {
         loading.value = false;
       } else {
         loading.value = false;
-        // 重新获取验证码
-        if (captchaEnabled.value) {
-          await getCode();
-        }
       }
     } else {
       console.log('error submit!', fields);
     }
   });
-};
-
-/**
- * 获取验证码
- */
-const getCode = async () => {
-  const res = await getCodeImg();
-  const { data } = res;
-  captchaEnabled.value = data.captchaEnabled === undefined ? true : data.captchaEnabled;
-  if (captchaEnabled.value) {
-    // 刷新验证码时清空输入框
-    loginForm.value.code = '';
-    codeUrl.value = 'data:image/png;base64,' + data.img;
-    loginForm.value.uuid = data.uuid;
-  }
 };
 
 const getLoginData = () => {
@@ -226,7 +186,6 @@ const doSocialLogin = (type: string) => {
 };
 
 onMounted(() => {
-  getCode();
   initTenantList();
   getLoginData();
 });
