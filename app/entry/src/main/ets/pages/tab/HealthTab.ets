@@ -1,6 +1,7 @@
 import { router } from '@kit.ArkUI';
 import { HealthApi, UploadHealthSummaryBody } from '../../service/HealthApi';
 import { RecommendApi, RecommendBody } from '../../service/RecommendApi';
+import { UserApi } from '../../service/UserApi';
 import { DishVo, RecommendItemVo } from '../../model/ApiModels';
 
 /** 详情页路由参数（ArkTS 禁止无类型对象字面量） */
@@ -101,16 +102,23 @@ export struct HealthTab {
 
   doRecommend(): void {
     this.recommendLoading = true;
-    const b = new RecommendBody();
-    b.scene = '';
-    b.useHealthData = true;
-    RecommendApi.recommend(b).then((res) => {
-      this.recommendLoading = false;
-      if (res.code === 200 && res.data != null) {
-        this.recommendations = res.data.recommendations;
-        this.todayReminder = res.data.todayReminder;
-        this.showRecommend = true;
+    // 读取用户预算偏好，随推荐一起生效
+    UserApi.getPreference().then((pRes) => {
+      const b = new RecommendBody();
+      b.scene = '';
+      b.useHealthData = true;
+      if (pRes.code === 200 && pRes.data != null) {
+        b.budgetMin = pRes.data.budgetMin;
+        b.budgetMax = pRes.data.budgetMax;
       }
+      RecommendApi.recommend(b).then((res) => {
+        this.recommendLoading = false;
+        if (res.code === 200 && res.data != null) {
+          this.recommendations = res.data.recommendations;
+          this.todayReminder = res.data.todayReminder;
+          this.showRecommend = true;
+        }
+      });
     });
   }
 
