@@ -17,6 +17,7 @@ import org.dromara.shanheng.entity.ShCategory;
 import org.dromara.shanheng.mapper.ShCategoryMapper;
 import org.dromara.shanheng.service.IShDishService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -79,7 +80,13 @@ public class ShDishImportListener extends AnalysisEventListener<ShDishImportVo> 
         if (StrUtil.isBlank(ingredients)) {
             return null;
         }
-        List<String> list = StrUtil.splitTrim(ingredients, ',', '，', '、');
+        String[] parts = ingredients.split("[,，、]");
+        List<String> list = new ArrayList<>();
+        for (String part : parts) {
+            if (StrUtil.isNotBlank(part)) {
+                list.add(part.trim());
+            }
+        }
         return JSONUtil.toJsonStr(list);
     }
 
