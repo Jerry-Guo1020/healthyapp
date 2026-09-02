@@ -135,6 +135,22 @@ tenant:
     - sys_client
     - sys_oss_config
     - flow_spel
+    # 膳衡业务表（sh_*，单租户场景不做租户隔离）
+    - sh_user
+    - sh_user_auth
+    - sh_category
+    - sh_dish
+    - sh_dish_tag
+    - sh_tag
+    - sh_favorite
+    - sh_browse_history
+    - sh_health_auth
+    - sh_health_summary
+    - sh_recommendation_rule
+    - sh_recommendation_record
+    - sh_recommend_feedback
+    - sh_user_preference
+    - sh_user_avoid
 
 # MyBatisPlus配置
 # https://baomidou.com/config/
