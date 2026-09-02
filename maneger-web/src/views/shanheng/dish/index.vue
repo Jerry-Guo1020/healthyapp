@@ -37,6 +37,12 @@
             <el-button v-hasPermi="['shanheng:dish:add']" type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
           </el-col>
           <el-col :span="1.5">
+            <el-button v-hasPermi="['shanheng:dish:import']" type="warning" plain icon="Upload" @click="handleImport">导入</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button v-hasPermi="['shanheng:dish:import']" type="primary" plain icon="Download" @click="handleImportTemplate">下载模板</el-button>
+          </el-col>
+          <el-col :span="1.5">
             <el-button v-hasPermi="['shanheng:dish:edit']" type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()">修改</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -220,11 +226,44 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 导入对话框 -->
+    <el-dialog v-model="upload.open" title="导入菜品" width="460px" append-to-body>
+      <el-upload
+        ref="uploadRef"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :disabled="upload.isUploading"
+        :on-change="handleFileChange"
+        :on-remove="handleFileRemove"
+        :auto-upload="false"
+        drag
+      >
+        <el-icon class="el-icon--upload">
+          <i-ep-upload-filled />
+        </el-icon>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击选取文件</em></div>
+        <template #tip>
+          <div class="text-center el-upload__tip">
+            <span>仅允许导入 xls、xlsx 格式文件，菜品名称与分类名称为必填。</span>
+            <div>
+              <el-link type="primary" :underline="false" style="font-size: 12px" @click="handleImportTemplate">下载模板</el-link>
+            </div>
+          </div>
+        </template>
+      </el-upload>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" :loading="upload.isUploading" @click="submitImport">确 定</el-button>
+          <el-button @click="upload.open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="ShDish" lang="ts">
-import { listDish, getDish, addDish, updateDish, delDish, enrichDish } from '@/api/shanheng/dish';
+import { listDish, getDish, addDish, updateDish, delDish, enrichDish, importDishData, importDishTemplate } from '@/api/shanheng/dish';
 import type { DishForm, DishQuery, DishVO } from '@/api/shanheng/dish';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -263,6 +302,13 @@ const enrichDialog = reactive({
   dishId: 0,
   keyword: ''
 });
+
+const upload = reactive({
+  open: false,
+  isUploading: false
+});
+const importFile = ref<File>();
+const uploadRef = ref<ElUploadInstance>();
 
 const initFormData: DishForm = {
   id: undefined,
@@ -418,6 +464,47 @@ const submitEnrich = async () => {
     await getList();
   } finally {
     enrichDialog.loading = false;
+  }
+};
+
+/** 打开导入 */
+const handleImport = () => {
+  upload.open = true;
+};
+
+/** 下载导入模板 */
+const handleImportTemplate = () => {
+  importDishTemplate();
+};
+
+/** 选择文件 */
+const handleFileChange = (file: UploadFile) => {
+  importFile.value = file.raw;
+};
+
+/** 移除文件 */
+const handleFileRemove = () => {
+  importFile.value = undefined;
+};
+
+/** 提交导入 */
+const submitImport = async () => {
+  if (!importFile.value) {
+    proxy?.$modal.msgWarning('请先选择要导入的 xlsx 文件');
+    return;
+  }
+  upload.isUploading = true;
+  try {
+    const formData = new FormData();
+    formData.append('file', importFile.value);
+    await importDishData(formData);
+    proxy?.$modal.msgSuccess('导入成功');
+    upload.open = false;
+    importFile.value = undefined;
+    uploadRef.value?.clearFiles();
+    await getList();
+  } finally {
+    upload.isUploading = false;
   }
 };
 

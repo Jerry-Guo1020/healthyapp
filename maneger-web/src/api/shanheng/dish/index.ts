@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request, { download } from '@/utils/request';
 import { AxiosPromise } from 'axios';
 
 /** 菜品查询参数 */
@@ -108,4 +108,18 @@ export function enrichDish(id: number, keyword?: string): AxiosPromise<{ code: n
     method: 'post',
     data: { keyword }
   });
+}
+
+/** 导入菜品（Excel） */
+export function importDishData(data: FormData) {
+  return request({
+    url: '/shanheng/dish/importData',
+    method: 'post',
+    data
+  });
+}
+
+/** 下载导入模板 */
+export function importDishTemplate() {
+  return download('/shanheng/dish/importTemplate', {}, '菜品导入模板.xlsx');
 }
