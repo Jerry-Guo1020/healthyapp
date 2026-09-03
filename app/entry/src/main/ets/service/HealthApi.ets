@@ -1,5 +1,5 @@
 import { ApiClient } from './ApiClient';
-import { ApiResult, HealthAuthVo, HealthSummaryVo } from '../model/ApiModels';
+import { ApiResult, HealthAnalysisVo, HealthAuthVo, HealthSummaryVo } from '../model/ApiModels';
 
 /** 上报健康摘要请求体 */
 export class UploadHealthSummaryBody {
@@ -32,6 +32,11 @@ export class HealthApi {
   /** 最新健康摘要 */
   static async latestSummary(): Promise<ApiResult<HealthSummaryVo>> {
     return ApiClient.get<HealthSummaryVo>('/health/summary/latest');
+  }
+
+  /** 健康分析报告 */
+  static async analyze(): Promise<ApiResult<HealthAnalysisVo>> {
+    return ApiClient.get<HealthAnalysisVo>('/health/analysis');
   }
 
   /** 更新授权状态 */

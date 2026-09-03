@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
 import org.dromara.shanheng.domain.bo.HealthAuthStatusBo;
 import org.dromara.shanheng.domain.bo.UploadHealthSummaryBo;
+import org.dromara.shanheng.domain.vo.HealthAnalysisVo;
 import org.dromara.shanheng.domain.vo.HealthAuthVo;
 import org.dromara.shanheng.domain.vo.HealthSummaryVo;
 import org.dromara.shanheng.service.IAppHealthService;
@@ -36,6 +37,12 @@ public class AppHealthController {
     @GetMapping("/summary/latest")
     public R<HealthSummaryVo> latest() {
         return R.ok(healthService.latest());
+    }
+
+    /** 健康分析报告 */
+    @GetMapping("/analysis")
+    public R<HealthAnalysisVo> analysis() {
+        return R.ok(healthService.analyze());
     }
 
     /** 更新授权状态 */

@@ -2,7 +2,8 @@ import { router } from '@kit.ArkUI';
 import { HealthApi, UploadHealthSummaryBody } from '../../service/HealthApi';
 import { RecommendApi, RecommendBody } from '../../service/RecommendApi';
 import { UserApi } from '../../service/UserApi';
-import { DishVo, RecommendItemVo } from '../../model/ApiModels';
+import { HuaweiHealthService } from '../../service/HuaweiHealthService';
+import { DishVo, RecommendItemVo, HealthAnalysisVo, HealthMetricVo, HealthSummaryVo } from '../../model/ApiModels';
 
 /** 详情页路由参数（ArkTS 禁止无类型对象字面量） */
 class DishDetailParams {
@@ -11,21 +12,25 @@ class DishDetailParams {
 }
 
 /**
- * 健康 Tab：健康摘要 + 手动记录状态 + 智能推荐
- * 说明：对接华为手表后，摘要来源为 HEALTH_KIT 自动同步；
- *      当前阶段用手动录入（MANUAL）跑通同一条推荐规则引擎。
+ * 健康 Tab：卡片式健康分析 + 华为运动健康同步 + 手动记录 + 智能推荐
+ * - 分析卡片：综合评分 / 逐项指标 / 饮食建议（后端 /health/analysis）
+ * - 华为同步：Health Service Kit 一般权限（步数/卡路里/距离）
+ * - 手动录入：无手表也能跑通同一条推荐规则引擎（MANUAL）
  */
 @Component
 export struct HealthTab {
   @Prop @Watch('onActiveChange') active: boolean = false;
 
-  // 摘要展示
-  @State hasSummary: boolean = false;
-  @State todaySteps: number = 0;
-  @State sleepHours: string = '';
-  @State stressText: string = '';
-  @State activityText: string = '';
-  @State summarySource: string = '';
+  // 健康分析
+  @State analysisLoading: boolean = false;
+  @State analysis: HealthAnalysisVo = new HealthAnalysisVo();
+
+  // 华为同步
+  @State syncing: boolean = false;
+  @State syncMessage: string = '';
+  @State syncedSteps: number = 0;
+  @State syncedCalorie: number = 0;
+  @State syncedDistance: number = 0;
 
   // 手动录入选项
   @State sleepOption: number = 2;    // 1不足 2正常 3充足
@@ -40,28 +45,66 @@ export struct HealthTab {
   @State todayReminder: string = '';
 
   aboutToAppear(): void {
-    this.loadSummary();
+    this.loadAnalysis();
   }
 
   onActiveChange(): void {
     if (this.active) {
-      this.loadSummary();
+      this.loadAnalysis();
     }
   }
 
-  loadSummary(): void {
-    HealthApi.latestSummary().then((res) => {
+  /** 加载健康分析报告 */
+  loadAnalysis(): void {
+    this.analysisLoading = true;
+    HealthApi.analyze().then((res) => {
+      this.analysisLoading = false;
       if (res.code === 200 && res.data != null) {
-        const s = res.data;
-        this.hasSummary = true;
-        this.todaySteps = s.todaySteps;
-        this.sleepHours = (s.sleepDurationMin / 60).toFixed(1);
-        this.stressText = s.stressLevel === 1 ? '低' : (s.stressLevel === 3 ? '高' : '中');
-        this.activityText = s.activityLevel === 1 ? '少' : (s.activityLevel === 3 ? '多' : '一般');
-        this.summarySource = s.source === 'HEALTH_KIT' ? '华为运动健康' : '手动录入';
+        this.analysis = res.data;
       } else {
-        this.hasSummary = false;
+        this.analysis = new HealthAnalysisVo();
       }
+    });
+  }
+
+  /** 同步华为运动健康（一般权限数据），并把步数合并进摘要 */
+  syncHuawei(): void {
+    const ctx = this.getUIContext().getHostContext();
+    if (ctx === undefined) {
+      this.syncMessage = '无法获取应用上下文';
+      return;
+    }
+    this.syncing = true;
+    this.syncMessage = '';
+    HuaweiHealthService.authorizeAndSyncToday(ctx).then((r) => {
+      this.syncing = false;
+      this.syncMessage = r.message;
+      if (!r.success) {
+        return;
+      }
+      this.syncedSteps = r.steps;
+      this.syncedCalorie = r.calorie;
+      this.syncedDistance = r.distance;
+      // 合并现有手动数据 + 华为步数，以上报摘要
+      HealthApi.latestSummary().then((sRes) => {
+        const body = new UploadHealthSummaryBody();
+        const s: HealthSummaryVo | null = (sRes.code === 200) ? sRes.data : null;
+        if (s != null) {
+          body.sleepDurationMin = s.sleepDurationMin;
+          body.sleepQualityScore = s.sleepQualityScore;
+          body.restingHeartRate = s.restingHeartRate;
+          body.stressLevel = s.stressLevel;
+        }
+        body.summaryDate = this.todayStr();
+        body.source = 'HEALTH_KIT';
+        body.dataTime = this.nowStr();
+        body.todaySteps = r.steps;
+        body.activityLevel = this.stepLevel(r.steps);
+        HealthApi.uploadSummary(body).then(() => {
+          this.loadAnalysis();
+          this.doRecommend();
+        });
+      });
     });
   }
 
@@ -93,7 +136,7 @@ export struct HealthTab {
     this.submitting = true;
     HealthApi.uploadSummary(body).then((res) => {
       if (res.code === 200) {
-        this.loadSummary();
+        this.loadAnalysis();
         this.doRecommend();
       }
       this.submitting = false;
@@ -120,6 +163,16 @@ export struct HealthTab {
         }
       });
     });
+  }
+
+  private stepLevel(steps: number): number {
+    if (steps < 4000) {
+      return 1;
+    }
+    if (steps < 8000) {
+      return 2;
+    }
+    return 3;
   }
 
   private openDetail(dish: DishVo): void {
@@ -154,6 +207,33 @@ export struct HealthTab {
   private nowStr(): string {
     const d = new Date();
     return `${this.todayStr()} ${this.pad(d.getHours())}:${this.pad(d.getMinutes())}:${this.pad(d.getSeconds())}`;
+  }
+
+  /** 指标等级颜色 1优秀绿 2良好蓝 3一般橙 4需关注红 */
+  private levelColor(level: number): string {
+    if (level === 1) {
+      return '#00A86B';
+    }
+    if (level === 2) {
+      return '#4A90E2';
+    }
+    if (level === 3) {
+      return '#F5A623';
+    }
+    return '#FF5B5B';
+  }
+
+  private scoreColor(score: number): string {
+    if (score >= 85) {
+      return '#00A86B';
+    }
+    if (score >= 70) {
+      return '#4A90E2';
+    }
+    if (score >= 55) {
+      return '#F5A623';
+    }
+    return '#FF5B5B';
   }
 
   @Builder
@@ -204,51 +284,42 @@ export struct HealthTab {
     .margin({ top: 14 })
   }
 
-  @Builder
-  summaryMetric(name: string, value: string, unit: string) {
-    Column() {
-      Text(`${value}${unit}`)
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
-        .fontColor('#1A1A1A')
-      Text(name)
-        .fontSize(12)
-        .fontColor('#999999')
-        .margin({ top: 4 })
-    }
-    .layoutWeight(1)
-    .alignItems(HorizontalAlign.Start)
-  }
+  // ---------- 分析卡片 ----------
 
   @Builder
-  summaryCard() {
+  analysisCard() {
     Column() {
       Row() {
-        Text('今日健康状态')
+        Text('健康分析')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
           .fontColor('#1A1A1A')
         Blank()
-        if (this.hasSummary) {
-          Text(this.summarySource)
-            .fontSize(11)
-            .fontColor('#00A86B')
-            .backgroundColor('#00A86B14')
-            .padding({ left: 8, right: 8, top: 3, bottom: 3 })
-            .borderRadius(4)
-        }
+        Text('数据驱动 · 饮食联动')
+          .fontSize(11)
+          .fontColor('#999999')
       }
       .width('100%')
 
-      if (!this.hasSummary) {
+      if (this.analysisLoading) {
+        Row() {
+          LoadingProgress()
+            .width(28)
+            .height(28)
+            .color('#00A86B')
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.Center)
+        .padding({ top: 24, bottom: 24 })
+      } else if (!this.analysis.hasData) {
         Column() {
           Text('🫀')
-            .fontSize(40)
+            .fontSize(44)
           Text('暂无健康数据')
             .fontSize(15)
             .fontColor('#1A1A1A')
             .margin({ top: 8 })
-          Text('记录今日状态，获得更精准的饮食推荐')
+          Text('同步华为运动健康或手动记录，生成个性化分析')
             .fontSize(12)
             .fontColor('#999999')
             .margin({ top: 4 })
@@ -258,16 +329,54 @@ export struct HealthTab {
         .justifyContent(FlexAlign.Center)
       } else {
         Row() {
-          this.summaryMetric('今日步数', `${this.todaySteps}`, ' 步')
-          this.summaryMetric('昨晚睡眠', this.sleepHours, ' 小时')
+          Column() {
+            Text(`${this.analysis.totalScore}`)
+              .fontSize(46)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.scoreColor(this.analysis.totalScore))
+            Text('综合评分')
+              .fontSize(12)
+              .fontColor('#999999')
+              .margin({ top: 2 })
+          }
+          .alignItems(HorizontalAlign.Center)
+
+          Column() {
+            Text(this.analysis.totalLevel)
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(this.scoreColor(this.analysis.totalScore))
+              .backgroundColor('#F0F2F3')
+              .padding({ left: 10, right: 10, top: 4, bottom: 4 })
+              .borderRadius(12)
+            Text(this.analysis.summary)
+              .fontSize(12)
+              .fontColor('#666666')
+              .margin({ top: 8 })
+              .maxLines(2)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Start)
+          .margin({ left: 18 })
         }
         .width('100%')
         .margin({ top: 16 })
+
         Row() {
-          this.summaryMetric('当前压力', this.stressText, '')
-          this.summaryMetric('今日活动', this.activityText, '')
+          Text('🥗')
+            .fontSize(14)
+          Text(this.analysis.dietAdvice)
+            .fontSize(12)
+            .fontColor('#666666')
+            .layoutWeight(1)
+            .maxLines(3)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
         .width('100%')
+        .padding(10)
+        .backgroundColor('#F0F8F3')
+        .borderRadius(8)
         .margin({ top: 14 })
       }
     }
@@ -279,13 +388,157 @@ export struct HealthTab {
   }
 
   @Builder
+  metricCard(m: HealthMetricVo) {
+    Column() {
+      Row() {
+        Text(m.icon)
+          .fontSize(24)
+        Column() {
+          Text(m.label)
+            .fontSize(11)
+            .fontColor('#999999')
+          Row() {
+            Text(m.value)
+              .fontSize(20)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#1A1A1A')
+            if (m.unit !== '') {
+              Text(m.unit)
+                .fontSize(11)
+                .fontColor('#999999')
+                .margin({ left: 2 })
+            }
+          }
+          .margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .margin({ left: 8 })
+        .layoutWeight(1)
+
+        Text(m.levelText)
+          .fontSize(11)
+          .fontColor(this.levelColor(m.level))
+          .backgroundColor('#F0F2F3')
+          .padding({ left: 8, right: 8, top: 3, bottom: 3 })
+          .borderRadius(10)
+      }
+      .width('100%')
+
+      Progress({ value: m.progress, total: 100, type: ProgressType.Linear })
+        .width('100%')
+        .height(6)
+        .color(this.levelColor(m.level))
+        .margin({ top: 12 })
+
+      Text(m.advice)
+        .fontSize(11)
+        .fontColor('#888888')
+        .width('100%')
+        .margin({ top: 8 })
+        .maxLines(2)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .padding(12)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(12)
+  }
+
+  @Builder
+  metricGrid() {
+    Grid() {
+      ForEach(this.analysis.metrics, (m: HealthMetricVo) => {
+        GridItem() {
+          this.metricCard(m)
+        }
+      }, (m: HealthMetricVo) => m.key)
+    }
+    .columnsTemplate('1fr 1fr')
+    .columnsGap(10)
+    .rowsGap(10)
+    .width('92%')
+    .margin({ top: 12 })
+  }
+
+  // ---------- 华为同步卡片 ----------
+
+  @Builder
+  huaweiCard() {
+    Column() {
+      Row() {
+        Text('华为运动健康同步')
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .fontColor('#1A1A1A')
+        Blank()
+        Text('步数 · 卡路里 · 距离')
+          .fontSize(11)
+          .fontColor('#999999')
+      }
+      .width('100%')
+
+      if (this.syncMessage !== '') {
+        Text(this.syncMessage)
+          .fontSize(12)
+          .fontColor('#F5A623')
+          .width('100%')
+          .margin({ top: 8 })
+      }
+
+      if (this.syncedSteps > 0) {
+        Row() {
+          this.miniMetric('今日步数', `${this.syncedSteps} 步`)
+          this.miniMetric('消耗', `${this.syncedCalorie} 千卡`)
+          this.miniMetric('距离', `${(this.syncedDistance / 1000).toFixed(1)} km`)
+        }
+        .width('100%')
+        .margin({ top: 12 })
+      }
+
+      Button(this.syncing ? '同步中...' : '同步华为运动健康')
+        .width('100%')
+        .height(42)
+        .fontSize(14)
+        .fontColor('#FFFFFF')
+        .backgroundColor('#00A86B')
+        .borderRadius(21)
+        .margin({ top: 14 })
+        .onClick(() => {
+          this.syncHuawei();
+        })
+    }
+    .width('92%')
+    .padding(16)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(14)
+    .margin({ top: 12 })
+  }
+
+  @Builder
+  miniMetric(name: string, value: string) {
+    Column() {
+      Text(value)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#1A1A1A')
+      Text(name)
+        .fontSize(11)
+        .fontColor('#999999')
+        .margin({ top: 3 })
+    }
+    .layoutWeight(1)
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  // ---------- 手动录入卡片 ----------
+
+  @Builder
   manualCard() {
     Column() {
       Text('手动记录今日状态')
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
         .fontColor('#1A1A1A')
-      Text('无手表也能体验健康推荐；对接华为手表后可自动同步')
+      Text('无手表也能体验健康推荐；对接华为设备后可自动同步')
         .fontSize(11)
         .fontColor('#999999')
         .margin({ top: 4 })
@@ -312,6 +565,8 @@ export struct HealthTab {
     .borderRadius(14)
     .margin({ top: 12 })
   }
+
+  // ---------- 推荐 ----------
 
   @Builder
   recommendCard(item: RecommendItemVo) {
@@ -445,7 +700,11 @@ export struct HealthTab {
 
       Scroll() {
         Column() {
-          this.summaryCard()
+          this.analysisCard()
+          if (this.analysis.hasData) {
+            this.metricGrid()
+          }
+          this.huaweiCard()
           this.manualCard()
           if (this.showRecommend) {
             this.recommendSection()

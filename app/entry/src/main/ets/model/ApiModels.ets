@@ -138,6 +138,32 @@ export class RecommendationRecordVo {
   createTime: string = '';
 }
 
+// 健康指标项
+export class HealthMetricVo {
+  key: string = '';
+  icon: string = '';
+  label: string = '';
+  value: string = '';
+  unit: string = '';
+  level: number = 0;
+  levelText: string = '';
+  advice: string = '';
+  progress: number = 0;
+  score: number = 0;
+}
+
+// 健康分析报告
+export class HealthAnalysisVo {
+  hasData: boolean = false;
+  totalScore: number = 0;
+  totalLevel: string = '';
+  summary: string = '';
+  dietAdvice: string = '';
+  metrics: HealthMetricVo[] = [];
+  recommendations: RecommendItemVo[] = [];
+  todayReminder: string = '';
+}
+
 // 食物拍照识别结果
 export class FoodRecognizeVo {
   name: string = '';

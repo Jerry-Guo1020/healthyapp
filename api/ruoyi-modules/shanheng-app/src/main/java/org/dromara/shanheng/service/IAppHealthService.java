@@ -2,6 +2,7 @@ package org.dromara.shanheng.service;
 
 import org.dromara.shanheng.domain.bo.HealthAuthStatusBo;
 import org.dromara.shanheng.domain.bo.UploadHealthSummaryBo;
+import org.dromara.shanheng.domain.vo.HealthAnalysisVo;
 import org.dromara.shanheng.domain.vo.HealthAuthVo;
 import org.dromara.shanheng.domain.vo.HealthSummaryVo;
 
@@ -17,6 +18,9 @@ public interface IAppHealthService {
 
     /** 查询最新健康摘要 */
     HealthSummaryVo latest();
+
+    /** 健康分析报告 */
+    HealthAnalysisVo analyze();
 
     /** 更新授权状态 */
     HealthAuthVo updateAuthStatus(HealthAuthStatusBo bo);

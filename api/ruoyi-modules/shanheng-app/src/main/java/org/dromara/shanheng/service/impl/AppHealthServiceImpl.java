@@ -8,14 +8,19 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.exception.ServiceException;
 import org.dromara.shanheng.domain.bo.HealthAuthStatusBo;
+import org.dromara.shanheng.domain.bo.RecommendBo;
 import org.dromara.shanheng.domain.bo.UploadHealthSummaryBo;
+import org.dromara.shanheng.domain.vo.HealthAnalysisVo;
 import org.dromara.shanheng.domain.vo.HealthAuthVo;
 import org.dromara.shanheng.domain.vo.HealthSummaryVo;
+import org.dromara.shanheng.domain.vo.RecommendResultVo;
 import org.dromara.shanheng.entity.ShHealthAuth;
 import org.dromara.shanheng.entity.ShHealthSummary;
 import org.dromara.shanheng.mapper.ShHealthAuthMapper;
 import org.dromara.shanheng.mapper.ShHealthSummaryMapper;
 import org.dromara.shanheng.service.IAppHealthService;
+import org.dromara.shanheng.service.IAppRecommendService;
+import org.dromara.shanheng.support.HealthAnalyzer;
 import org.dromara.shanheng.support.HealthSummaryAssembler;
 import org.dromara.shanheng.util.AppLoginHelper;
 import org.springframework.stereotype.Service;
@@ -34,6 +39,8 @@ public class AppHealthServiceImpl implements IAppHealthService {
     private final ShHealthSummaryMapper healthSummaryMapper;
     private final ShHealthAuthMapper healthAuthMapper;
     private final HealthSummaryAssembler healthSummaryAssembler;
+    private final HealthAnalyzer healthAnalyzer;
+    private final IAppRecommendService recommendService;
 
     @Override
     public void uploadSummary(UploadHealthSummaryBo bo) {
@@ -71,6 +78,27 @@ public class AppHealthServiceImpl implements IAppHealthService {
             .orderByDesc(ShHealthSummary::getId)
             .last("limit 1"));
         return healthSummaryAssembler.toVo(s);
+    }
+
+    @Override
+    public HealthAnalysisVo analyze() {
+        Long userId = requireUserId();
+        ShHealthSummary summary = healthSummaryMapper.selectOne(new LambdaQueryWrapper<ShHealthSummary>()
+            .eq(ShHealthSummary::getUserId, userId)
+            .orderByDesc(ShHealthSummary::getSummaryDate)
+            .orderByDesc(ShHealthSummary::getId)
+            .last("limit 1"));
+
+        HealthAnalysisVo analysis = healthAnalyzer.analyze(summary);
+        if (Boolean.TRUE.equals(analysis.getHasData())) {
+            RecommendBo bo = new RecommendBo();
+            bo.setScene("HEALTH_ANALYSIS");
+            bo.setUseHealthData(true);
+            RecommendResultVo rec = recommendService.recommend(bo);
+            analysis.setRecommendations(rec.getRecommendations());
+            analysis.setTodayReminder(rec.getTodayReminder());
+        }
+        return analysis;
     }
 
     @Override
