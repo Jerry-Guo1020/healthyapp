@@ -3,6 +3,7 @@ package org.dromara.shanheng.controller;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
 import org.dromara.shanheng.domain.bo.GuestLoginBo;
+import org.dromara.shanheng.domain.bo.HuaweiLoginBo;
 import org.dromara.shanheng.domain.bo.LoginByCodeBo;
 import org.dromara.shanheng.domain.bo.SendCodeBo;
 import org.dromara.shanheng.domain.vo.AppLoginVo;
@@ -49,6 +50,14 @@ public class AppAuthController {
     @PostMapping("/guest")
     public R<AppLoginVo> guest(@Validated @RequestBody GuestLoginBo bo) {
         return R.ok(appAuthService.guestLogin(bo.getDeviceId()));
+    }
+
+    /**
+     * 华为账号授权码登录
+     */
+    @PostMapping("/huawei-login")
+    public R<AppLoginVo> huaweiLogin(@Validated @RequestBody HuaweiLoginBo bo) {
+        return R.ok(appAuthService.huaweiLogin(bo));
     }
 
     /**

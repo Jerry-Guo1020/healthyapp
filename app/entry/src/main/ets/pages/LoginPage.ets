@@ -1,8 +1,10 @@
 import { router, promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
 import { AuthApi } from '../service/AuthApi';
 import { UserSession } from '../common/UserSession';
 import { DeviceUtil } from '../common/DeviceUtil';
 import { Logger } from '../common/Logger';
+import { HuaweiAuthService, HuaweiAuthCode } from '../service/HuaweiAuthService';
 
 const TAG: string = 'LoginPage';
 
@@ -17,6 +19,7 @@ struct LoginPage {
   @State countdown: number = 0;
   @State loading: boolean = false;
   @State guestLoading: boolean = false;
+  @State huaweiLoading: boolean = false;
   private timerId: number = -1;
 
   aboutToDisappear(): void {
@@ -83,6 +86,27 @@ struct LoginPage {
         Logger.info(TAG, 'guest login success');
         this.goMain();
       }
+    });
+  }
+
+  onHuaweiLogin(): void {
+    if (this.huaweiLoading) {
+      return;
+    }
+    this.huaweiLoading = true;
+    HuaweiAuthService.getAuthorizationCode().then((authCode: HuaweiAuthCode) => {
+      return AuthApi.huaweiLogin(authCode.code, authCode.state);
+    }).then((res) => {
+      this.huaweiLoading = false;
+      if (res.code === 200 && res.data != null) {
+        UserSession.saveLogin(res.data);
+        Logger.info(TAG, 'huawei login success');
+        this.goMain();
+      }
+    }).catch((err: BusinessError) => {
+      this.huaweiLoading = false;
+      Logger.error(TAG, `huawei login fail: ${err.message}`);
+      promptAction.showToast({ message: '华为登录失败，请稍后重试' });
     });
   }
 
@@ -158,9 +182,22 @@ struct LoginPage {
           .fontSize(16)
           .fontColor('#00A86B')
           .backgroundColor('#00A86B1A')
+          .margin({ top: 14 })
           .enabled(!this.guestLoading)
           .onClick(() => {
             this.onGuestLogin();
+          })
+
+        Button('华为账号登录')
+          .width('100%')
+          .height(50)
+          .fontSize(16)
+          .fontColor('#FFFFFF')
+          .backgroundColor('#CF0A2C')
+          .margin({ top: 14 })
+          .enabled(!this.huaweiLoading)
+          .onClick(() => {
+            this.onHuaweiLogin();
           })
       }
       .width('86%')

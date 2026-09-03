@@ -1,3 +1,4 @@
+import { router } from '@kit.ArkUI';
 import { BizApi, DishQuery } from '../../service/BizApi';
 import { CategoryVo, DishVo } from '../../model/ApiModels';
 import { DishCard } from '../../components/DishCard';
@@ -131,6 +132,29 @@ export struct HomeTab {
       .backgroundColor('#EBEDEF')
       .borderRadius(21)
       .margin({ bottom: 10 })
+
+      Row() {
+        Text('📷')
+          .fontSize(18)
+        Text('拍照识食')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor('#FFFFFF')
+          .margin({ left: 8 })
+        Blank()
+        Text('拍下食物，智能识别并推荐 ›')
+          .fontSize(12)
+          .fontColor('#DFF5E9')
+      }
+      .width('92%')
+      .height(44)
+      .padding({ left: 14, right: 14 })
+      .backgroundColor('#00A86B')
+      .borderRadius(12)
+      .margin({ bottom: 10 })
+      .onClick(() => {
+        router.pushUrl({ url: 'pages/FoodRecognizePage' });
+      })
 
       Scroll() {
         Row({ space: 10 }) {

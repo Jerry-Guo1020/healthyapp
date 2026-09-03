@@ -146,6 +146,24 @@ export struct ProfileTab {
     });
   }
 
+  confirmAuthorize(): void {
+    this.getUIContext().showAlertDialog({
+      title: '健康数据授权',
+      message: '将授权读取：步数、睡眠、心率、压力、日常活动数据，用于生成个性化饮食推荐。你可随时在本页取消授权。',
+      primaryButton: {
+        value: '同意授权',
+        action: () => {
+          this.authorizeHealth();
+        }
+      },
+      secondaryButton: {
+        value: '取消',
+        action: () => {
+        }
+      }
+    });
+  }
+
   authorizeHealth(): void {
     if (this.authorizing) {
       return;
@@ -159,6 +177,24 @@ export struct ProfileTab {
       if (res.code === 200) {
         this.authStatus = 1;
         promptAction.showToast({ message: '已授权华为运动健康' });
+      }
+    });
+  }
+
+  confirmRevoke(): void {
+    this.getUIContext().showAlertDialog({
+      title: '取消健康授权',
+      message: '取消后将不再使用你的健康数据生成推荐，确定取消吗？',
+      primaryButton: {
+        value: '确定取消',
+        action: () => {
+          this.revokeHealth();
+        }
+      },
+      secondaryButton: {
+        value: '再想想',
+        action: () => {
+        }
       }
     });
   }
@@ -538,7 +574,7 @@ export struct ProfileTab {
         .margin({ top: 8 })
 
       if (this.authStatus === 1) {
-        Button('取消授权')
+        Button(this.authorizing ? '处理中...' : '取消授权')
           .width('100%')
           .height(40)
           .fontSize(14)
@@ -546,11 +582,12 @@ export struct ProfileTab {
           .backgroundColor('#FFF0F0')
           .borderRadius(20)
           .margin({ top: 14 })
+          .enabled(!this.authorizing)
           .onClick(() => {
-            this.revokeHealth();
+            this.confirmRevoke();
           })
       } else {
-        Button('授权华为运动健康')
+        Button(this.authorizing ? '授权中...' : '授权华为运动健康')
           .width('100%')
           .height(40)
           .fontSize(14)
@@ -558,8 +595,9 @@ export struct ProfileTab {
           .backgroundColor('#00A86B')
           .borderRadius(20)
           .margin({ top: 14 })
+          .enabled(!this.authorizing)
           .onClick(() => {
-            this.authorizeHealth();
+            this.confirmAuthorize();
           })
       }
     }

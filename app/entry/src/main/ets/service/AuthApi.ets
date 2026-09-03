@@ -15,6 +15,11 @@ class LoginByCodeBody {
   code: string = '';
 }
 
+class HuaweiLoginBody {
+  code: string = '';
+  state: string = '';
+}
+
 /**
  * 认证接口
  */
@@ -39,6 +44,14 @@ export class AuthApi {
     body.phone = phone;
     body.code = code;
     return ApiClient.post<AppLoginVo>('/auth/login-by-code', body);
+  }
+
+  /** 华为账号授权码登录 */
+  static async huaweiLogin(code: string, state: string): Promise<ApiResult<AppLoginVo>> {
+    const body = new HuaweiLoginBody();
+    body.code = code;
+    body.state = state;
+    return ApiClient.post<AppLoginVo>('/auth/huawei-login', body);
   }
 
   /** 登出（无状态 JWT，客户端丢弃即可） */

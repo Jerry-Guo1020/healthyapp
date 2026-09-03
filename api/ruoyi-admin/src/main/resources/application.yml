@@ -291,3 +291,15 @@ shanheng:
   usda:
     # USDA FoodData Central 免费 API Key（默认 DEMO_KEY 可测试，正式使用请注册并配置环境变量 SHANHENG_USDA_API_KEY）
     api-key: ${SHANHENG_USDA_API_KEY:DEMO_KEY}
+  huawei:
+    # 华为账号服务（Account Kit）授权码模式登录。需在 AppGallery Connect 创建应用后填入
+    client-id: ${SHANHENG_HUAWEI_CLIENT_ID:}
+    client-secret: ${SHANHENG_HUAWEI_CLIENT_SECRET:}
+    # 华为 OAuth 换 token 地址
+    token-url: ${SHANHENG_HUAWEI_TOKEN_URL:https://oauth-login.cloud.huawei.com/oauth2/v3/token}
+    # 华为用户信息地址
+    userinfo-url: ${SHANHENG_HUAWEI_USERINFO_URL:https://oauth-login.cloud.huawei.com/rest.php?nsp_svc=GOpen.oauth2.user.getTokenInfo}
+  baidu:
+    # 百度 AI 菜品识别（食物拍照识别）。需在百度智能云创建应用并开通「菜品识别」
+    api-key: ${SHANHENG_BAIDU_API_KEY:}
+    secret-key: ${SHANHENG_BAIDU_SECRET_KEY:}

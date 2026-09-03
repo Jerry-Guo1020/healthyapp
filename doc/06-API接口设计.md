@@ -79,15 +79,15 @@
 
 返回：JWT（游客角色）+ `userInfo.isGuest = true`。
 
-### 2.4 华为账号登录（预留）
+### 2.4 华为账号登录（已实现，授权码模式）
 
 `POST /app/v1/auth/huawei-login`
 
 ```json
-{ "authorizationCode": "xxx" }
+{ "code": "授权码", "state": "状态位" }
 ```
 
-后端用 code 向华为换取身份 → 注册/合并账号 → 返回 JWT。详见 `07-华为服务接入方案.md`。
+App 通过 Account Kit 授权码模式拿到 code → 后端换 access_token → 取华为用户信息 → 注册/合并账号 → 返回 JWT。详见 `07-华为服务接入方案.md` 1.5 节。
 
 ### 2.5 刷新 Token / 登出
 
@@ -311,6 +311,16 @@
 - `POST /app/v1/user/revoke-health-auth` → 取消健康授权
 - `POST /app/v1/user/unbind-huawei` → 解绑华为账号
 - `POST /app/v1/user/cancel-account` → 注销账号
+
+### 8.5 食物拍照识别
+
+`POST /app/v1/food/recognize`
+
+```json
+{ "image": "<图片 base64，可含 data:image/...;base64, 前缀>" }
+```
+
+响应：识别菜名 `name`、每 100g 卡路里 `calorie`、置信度 `probability`、匹配到的本地菜品 `matchedDish`（可能 null）、推荐列表 `recommends`。需百度 AI 菜品识别 key（配置 `shanheng.baidu.api-key/secret-key`）。
 
 ---
 

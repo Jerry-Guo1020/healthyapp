@@ -137,3 +137,13 @@ export class RecommendationRecordVo {
   reason: string = '';
   createTime: string = '';
 }
+
+// 食物拍照识别结果
+export class FoodRecognizeVo {
+  name: string = '';
+  calorie: string = '';
+  probability: string = '';
+  hasCalorie: boolean = false;
+  matchedDish: DishVo | null = null;
+  recommends: DishVo[] = [];
+}
