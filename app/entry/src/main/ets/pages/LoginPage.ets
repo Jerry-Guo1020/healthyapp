@@ -1,4 +1,5 @@
 import { router, promptAction } from '@kit.ArkUI';
+import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { AuthApi } from '../service/AuthApi';
 import { UserSession } from '../common/UserSession';
@@ -94,7 +95,13 @@ struct LoginPage {
       return;
     }
     this.huaweiLoading = true;
-    HuaweiAuthService.getAuthorizationCode().then((authCode: HuaweiAuthCode) => {
+    const ctx: common.Context | undefined = this.getUIContext().getHostContext();
+    if (ctx === undefined) {
+      this.huaweiLoading = false;
+      promptAction.showToast({ message: '无法获取应用上下文' });
+      return;
+    }
+    HuaweiAuthService.getAuthorizationCode(ctx).then((authCode: HuaweiAuthCode) => {
       return AuthApi.huaweiLogin(authCode.code, authCode.state);
     }).then((res) => {
       this.huaweiLoading = false;

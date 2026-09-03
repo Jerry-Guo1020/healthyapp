@@ -1,4 +1,4 @@
-import { util } from '@kit.ArkUI';
+import { util } from '@kit.ArkTS';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { image } from '@kit.ImageKit';
 
