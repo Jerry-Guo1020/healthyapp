@@ -218,6 +218,42 @@ App 通过 Account Kit 授权码模式拿到 code → 后端换 access_token →
 { "authScope": ["STEPS","SLEEP","HEART_RATE","STRESS"], "status": 1 }
 ```
 
+### 5.4 健康分析报告
+
+`GET /app/v1/health/analysis`
+
+返回结构化分析结果，供 App「健康」页卡片式展示：
+
+```json
+{
+  "hasData": true,
+  "totalScore": 78,
+  "totalLevel": "良好",
+  "summary": "整体状态良好，个别指标仍有提升空间",
+  "dietAdvice": "睡眠不足，午后避免咖啡因，晚餐清淡易消化，可吃香蕉、小米粥助眠",
+  "metrics": [
+    {
+      "key": "steps",
+      "icon": "👟",
+      "label": "今日步数",
+      "value": "8200",
+      "unit": "步",
+      "level": 2,
+      "levelText": "良好",
+      "advice": "活动量良好，继续保持",
+      "progress": 82,
+      "score": 75
+    }
+  ],
+  "recommendations": [],
+  "todayReminder": "保持均衡饮食"
+}
+```
+
+- 指标键：steps（步数）/ sleep（睡眠）/ heartRate（心率）/ stress（压力）/ activity（活动量）。
+- level：1 优秀 / 2 良好 / 3 一般 / 4 需关注。
+- 无健康数据时返回 `hasData=false` 与引导文案。
+
 ---
 
 ## 六、推荐模块
@@ -349,6 +385,7 @@ App 通过 Account Kit 授权码模式拿到 code → 后端换 access_token →
 | 健康 | POST | `/app/v1/health/summary` |
 | 健康 | GET | `/app/v1/health/summary/latest` |
 | 健康 | POST | `/app/v1/health/auth-status` |
+| 健康 | GET | `/app/v1/health/analysis` |
 | 推荐 | POST | `/app/v1/recommendations` |
 | 推荐 | GET | `/app/v1/recommendations` |
 | 推荐 | POST | `/app/v1/recommendations/{recordId}/feedback` |
