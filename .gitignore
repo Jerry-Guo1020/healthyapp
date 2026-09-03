@@ -38,6 +38,7 @@ local.properties
 # 前端构建配置必须入库：含 VITE_APP_BASE_API 等构建期注入项；其 RSA 密钥为浏览器可见的前端加密用，非后端私密，若依官方同样入库
 !maneger-web/.env.production
 !maneger-web/.env.development
+!deploy/.env.example
 *.local
 application-local.yml
 deploy/.env
