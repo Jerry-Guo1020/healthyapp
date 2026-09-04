@@ -81,12 +81,11 @@ struct SearchPage {
         Row() {
           Text('🔍')
             .fontSize(15)
-          TextInput({ placeholder: '搜索菜品名称', text: this.keyword })
+          TextInput({ placeholder: '搜索菜品名称', text: this.keyword, controller: this.searchCtrl })
             .layoutWeight(1)
             .height(40)
             .fontSize(14)
             .backgroundColor('#00000000')
-            .controller(this.searchCtrl)
             .onChange((value: string) => {
               this.keyword = value;
             })
