@@ -66,6 +66,8 @@ healthyapp/
 | 12 | [风险分析与解决方案](12-风险分析与解决方案.md) | 风险矩阵 + 应对 |
 | 13 | [管理后台平台方案](13-管理后台平台方案.md) | RuoYi-Vue-Plus 选型与集成 |
 | 14 | [CI/CD 与部署方案](14-CICD与部署方案.md) | GitHub Actions + Docker + R2 |
+| 15 | [后端模块实现设计](15-后端模块实现设计.md) | 膳衡业务模块分层与实现 |
+| 16 | [项目现状盘点与第三方服务说明](16-项目现状盘点.md) | 已完成功能清单 + 密钥/.env + 第三方调用 + 免费替代 + 手表对抗现状 |
 
 ---
 
@@ -80,15 +82,13 @@ healthyapp/
 
 ---
 
-## 六、当前状态（截至 2026-08-31）
+## 六、当前状态（截至任务 19，2026-09-03）
 
-- [x] `app/` 鸿蒙工程已初始化（SDK 6.1.1(24)，bundleName `com.example.healthyapp`）
-- [x] `api/` 统一后端已接入（RuoYi-Vue-Plus 5.6.2 + `shanheng-app` 业务模块）
-- [x] `maneger-web/` 管理端前端已接入（plus-ui 2.6.2，Vue3）
-- [x] `doc/` 首版文档已产出
-- [x] `tasks/` 任务日志机制已建立（004 条）
-- [x] `deploy/` Docker Compose + Nginx 编排已就绪
-- [x] `.github/workflows` CI/CD 已配置（api + manager-ui）
-- [x] `git init`（分支 `main`）
-- [ ] 首次 git commit 待执行
-- [ ] `shanheng-app` Controller/Service/Mapper 待开发
+- [x] `app/` 鸿蒙工程完成：登录（验证码/游客/华为）+ 首页推荐流 + 拍照识食 + 健康卡片页 + 收藏/历史/个人中心。
+- [x] `api/` 后端完成：认证闭环、分类/菜品/收藏/历史、智能推荐、健康摘要与分析、食物识别、饮食偏好与忌口。
+- [x] `maneger-web/` 管理端完成：精简登录（admin/admin123 无验证码）+ 菜品 CRUD + Excel 导入 + USDA 营养补全。
+- [x] 部署/CI 跑通：GitHub Actions 构建推送 GHCR，服务器 pull 跑 api(18080)/web(18081)/mysql/redis，业务数据已导入（63 表 + 种子数据）。
+- [x] 华为登录 + 食物识别 + 健康分析三块代码已落地并端到端自测（健康分析两态实测通过）。
+- [ ] 华为 Account Kit / Health Service Kit：待 AGC 开通服务 + 重生成签名 profile + 填 client_id/secret。
+- [ ] 百度菜品识别：待用户在百度智能云开通并填 API Key。
+- [ ] 手表受限权限数据（心率/睡眠/压力）：企业资质已到位，待 AGC 发审核 + 扩展前端同步代码。
