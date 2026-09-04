@@ -9,8 +9,14 @@ import { HuaweiAuthService, HuaweiAuthCode } from '../service/HuaweiAuthService'
 
 const TAG: string = 'LoginPage';
 
+// 协议页路由参数（ArkTS 禁止无类型对象字面量）
+class AgreementParams {
+  type: string = 'user';
+}
+
 /**
- * 登录页：手机验证码登录 + 游客一键登录
+ * 登录页：手机验证码登录 + 游客一键登录 + 华为账号登录（首次登录自动注册）。
+ * 登录前须勾选并同意《用户协议》《隐私政策》《华为账号用户认证协议》（参照华为一键登录 UX 规范）。
  */
 @Entry
 @Component
@@ -21,6 +27,7 @@ struct LoginPage {
   @State loading: boolean = false;
   @State guestLoading: boolean = false;
   @State huaweiLoading: boolean = false;
+  @State agreed: boolean = false;
   private timerId: number = -1;
 
   aboutToDisappear(): void {
@@ -34,7 +41,28 @@ struct LoginPage {
     return this.phone.length === 11;
   }
 
+  /** 所有登录操作前置校验：必须勾选协议 */
+  private checkAgreed(): boolean {
+    if (!this.agreed) {
+      promptAction.showToast({ message: '请先阅读并同意相关协议' });
+      return false;
+    }
+    return true;
+  }
+
+  private openAgreement(type: string): void {
+    const p = new AgreementParams();
+    p.type = type;
+    router.pushUrl({
+      url: 'pages/AgreementPage',
+      params: p
+    });
+  }
+
   onSendCode(): void {
+    if (!this.checkAgreed()) {
+      return;
+    }
     if (!this.isValidPhone()) {
       promptAction.showToast({ message: '请输入 11 位手机号' });
       return;
@@ -59,6 +87,9 @@ struct LoginPage {
   }
 
   onLoginByCode(): void {
+    if (!this.checkAgreed()) {
+      return;
+    }
     if (!this.isValidPhone()) {
       promptAction.showToast({ message: '请输入 11 位手机号' });
       return;
@@ -79,6 +110,9 @@ struct LoginPage {
   }
 
   onGuestLogin(): void {
+    if (!this.checkAgreed()) {
+      return;
+    }
     this.guestLoading = true;
     AuthApi.guestLogin(DeviceUtil.getDeviceId()).then((res) => {
       this.guestLoading = false;
@@ -91,6 +125,9 @@ struct LoginPage {
   }
 
   onHuaweiLogin(): void {
+    if (!this.checkAgreed()) {
+      return;
+    }
     if (this.huaweiLoading) {
       return;
     }
@@ -121,15 +158,15 @@ struct LoginPage {
     Column() {
       Column() {
         Text('膳衡')
-          .fontSize(36)
+          .fontSize(40)
           .fontWeight(FontWeight.Bold)
           .fontColor('#00A86B')
-        Text('健康饮食 · 膳衡相伴')
+        Text('懂你的健康，也懂你的胃')
           .fontSize(13)
           .fontColor('#999999')
           .margin({ top: 8 })
       }
-      .margin({ top: 90 })
+      .margin({ top: 80 })
 
       Column() {
         TextInput({ placeholder: '请输入手机号', text: this.phone })
@@ -180,31 +217,73 @@ struct LoginPage {
             this.onLoginByCode();
           })
 
+        // 协议勾选区（参照华为一键登录 UX：未勾选不可登录）
+        Row() {
+          Checkbox()
+            .select(this.agreed)
+            .selectedColor('#00A86B')
+            .width(18)
+            .height(18)
+            .margin({ right: 6 })
+            .onChange((value: boolean) => {
+              this.agreed = value;
+            })
+          Text('我已阅读并同意')
+            .fontSize(12)
+            .fontColor('#999999')
+          Text('《用户协议》')
+            .fontSize(12)
+            .fontColor('#00A86B')
+            .onClick(() => {
+              this.openAgreement('user');
+            })
+          Text('《隐私政策》')
+            .fontSize(12)
+            .fontColor('#00A86B')
+            .onClick(() => {
+              this.openAgreement('privacy');
+            })
+        }
+        .width('100%')
+        .margin({ top: 14 })
+        .alignItems(VerticalAlign.Center)
+
+        Row() {
+          Text('《华为账号用户认证协议》')
+            .fontSize(12)
+            .fontColor('#00A86B')
+            .margin({ left: 24 })
+            .onClick(() => {
+              this.openAgreement('huawei');
+            })
+        }
+        .width('100%')
+        .margin({ top: 4 })
+
         Divider()
-          .margin({ top: 24, bottom: 16 })
+          .margin({ top: 16, bottom: 14 })
+
+        Button('华为账号登录（首次登录将自动注册）')
+          .width('100%')
+          .height(50)
+          .fontSize(16)
+          .fontColor('#FFFFFF')
+          .backgroundColor('#CF0A2C')
+          .enabled(!this.huaweiLoading)
+          .onClick(() => {
+            this.onHuaweiLogin();
+          })
 
         Button('一键游客登录')
           .width('100%')
           .height(50)
           .fontSize(16)
           .fontColor('#00A86B')
-          .backgroundColor('#00A86B1A')
+          .backgroundColor('#00A86B14')
           .margin({ top: 14 })
           .enabled(!this.guestLoading)
           .onClick(() => {
             this.onGuestLogin();
-          })
-
-        Button('华为账号登录')
-          .width('100%')
-          .height(50)
-          .fontSize(16)
-          .fontColor('#FFFFFF')
-          .backgroundColor('#CF0A2C')
-          .margin({ top: 14 })
-          .enabled(!this.huaweiLoading)
-          .onClick(() => {
-            this.onHuaweiLogin();
           })
       }
       .width('86%')

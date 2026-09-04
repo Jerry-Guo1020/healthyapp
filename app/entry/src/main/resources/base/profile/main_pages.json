@@ -4,6 +4,7 @@
     "pages/LoginPage",
     "pages/MainPage",
     "pages/DishDetailPage",
-    "pages/FoodRecognizePage"
+    "pages/FoodRecognizePage",
+    "pages/AgreementPage"
   ]
 }
