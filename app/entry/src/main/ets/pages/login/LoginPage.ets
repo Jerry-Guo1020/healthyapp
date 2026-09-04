@@ -140,10 +140,10 @@ struct LoginPage {
         Text('膳衡')
           .fontSize(44)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#00A86B')
+          .fontColor($r('app.color.brand'))
         Text('懂你的健康，也懂你的胃')
           .fontSize(14)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
           .margin({ top: 10 })
       }
       .margin({ top: 110 })
@@ -155,7 +155,7 @@ struct LoginPage {
           .height(52)
           .fontSize(17)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#FFFFFF')
+          .fontColor($r('app.color.text_on_brand'))
           .backgroundColor('#CF0A2C')
           .enabled(!this.quickLoading)
           .onClick(() => {
@@ -164,7 +164,7 @@ struct LoginPage {
 
         Text('未开通一键登录的企业权限前，将自动降级为华为账号登录')
           .fontSize(11)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
           .width('100%')
           .textAlign(TextAlign.Center)
           .margin({ top: 8 })
@@ -189,8 +189,8 @@ struct LoginPage {
           .width('100%')
           .height(50)
           .fontSize(16)
-          .fontColor('#00A86B')
-          .backgroundColor('#FFFFFF')
+          .fontColor($r('app.color.brand'))
+          .backgroundColor($r('app.color.bg_card'))
           .margin({ top: 14 })
           .enabled(!this.guestLoading)
           .onClick(() => {
@@ -201,7 +201,7 @@ struct LoginPage {
         Row() {
           Checkbox()
             .select(this.agreed)
-            .selectedColor('#00A86B')
+            .selectedColor($r('app.color.brand'))
             .width(18)
             .height(18)
             .margin({ right: 6 })
@@ -210,16 +210,16 @@ struct LoginPage {
             })
           Text('我已阅读并同意')
             .fontSize(12)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
           Text('《用户协议》')
             .fontSize(12)
-            .fontColor('#00A86B')
+            .fontColor($r('app.color.brand'))
             .onClick(() => {
               this.openAgreement('user');
             })
           Text('《隐私政策》')
             .fontSize(12)
-            .fontColor('#00A86B')
+            .fontColor($r('app.color.brand'))
             .onClick(() => {
               this.openAgreement('privacy');
             })
@@ -231,7 +231,7 @@ struct LoginPage {
         Row() {
           Text('《华为账号用户认证协议》')
             .fontSize(12)
-            .fontColor('#00A86B')
+            .fontColor($r('app.color.brand'))
             .margin({ left: 24 })
             .onClick(() => {
               this.openAgreement('huawei');
@@ -242,17 +242,17 @@ struct LoginPage {
       }
       .width('86%')
       .padding(24)
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.bg_card'))
       .borderRadius(16)
       .margin({ top: 44 })
 
       Text('登录即代表同意相关协议，数据将安全存储于云端')
         .fontSize(11)
-        .fontColor('#BBBBBB')
+        .fontColor($r('app.color.text_hint'))
         .margin({ top: 22 })
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

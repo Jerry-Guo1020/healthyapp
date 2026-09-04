@@ -317,8 +317,8 @@ export struct ProfileTab {
   goalChip(code: string) {
     Text(this.goalText(code))
       .fontSize(13)
-      .fontColor(this.healthGoal === code ? '#FFFFFF' : '#555555')
-      .backgroundColor(this.healthGoal === code ? '#00A86B' : '#F0F2F3')
+      .fontColor(this.healthGoal === code ? $r('app.color.text_on_brand') : $r('app.color.text_mid'))
+      .backgroundColor(this.healthGoal === code ? $r('app.color.brand') : $r('app.color.bg_chip'))
       .padding({ left: 14, right: 14, top: 7, bottom: 7 })
       .borderRadius(16)
       .onClick(() => {
@@ -330,8 +330,8 @@ export struct ProfileTab {
   tasteChip(name: string) {
     Text(name)
       .fontSize(13)
-      .fontColor(this.inList(this.tasteSel, name) ? '#FFFFFF' : '#555555')
-      .backgroundColor(this.inList(this.tasteSel, name) ? '#00A86B' : '#F0F2F3')
+      .fontColor(this.inList(this.tasteSel, name) ? $r('app.color.text_on_brand') : $r('app.color.text_mid'))
+      .backgroundColor(this.inList(this.tasteSel, name) ? $r('app.color.brand') : $r('app.color.bg_chip'))
       .padding({ left: 14, right: 14, top: 7, bottom: 7 })
       .borderRadius(16)
       .onClick(() => {
@@ -343,8 +343,8 @@ export struct ProfileTab {
   cuisineChip(name: string) {
     Text(name)
       .fontSize(13)
-      .fontColor(this.inList(this.cuisineSel, name) ? '#FFFFFF' : '#555555')
-      .backgroundColor(this.inList(this.cuisineSel, name) ? '#00A86B' : '#F0F2F3')
+      .fontColor(this.inList(this.cuisineSel, name) ? $r('app.color.text_on_brand') : $r('app.color.text_mid'))
+      .backgroundColor(this.inList(this.cuisineSel, name) ? $r('app.color.brand') : $r('app.color.bg_chip'))
       .padding({ left: 14, right: 14, top: 7, bottom: 7 })
       .borderRadius(16)
       .onClick(() => {
@@ -357,14 +357,14 @@ export struct ProfileTab {
     Row() {
       Text(v.itemName)
         .fontSize(13)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
       Text(' ✕')
         .fontSize(13)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .margin({ left: 4 })
     }
     .padding({ left: 12, right: 12, top: 7, bottom: 7 })
-    .backgroundColor('#F0F2F3')
+    .backgroundColor($r('app.color.bg_chip'))
     .borderRadius(16)
     .onClick(() => {
       this.removeAvoid(v.id);
@@ -375,8 +375,8 @@ export struct ProfileTab {
   quickAvoidChip(name: string) {
     Text('+ ' + name)
       .fontSize(13)
-      .fontColor('#00A86B')
-      .backgroundColor('#00A86B12')
+      .fontColor($r('app.color.brand'))
+      .backgroundColor($r('app.color.brand_bg12'))
       .padding({ left: 12, right: 12, top: 7, bottom: 7 })
       .borderRadius(16)
       .onClick(() => {
@@ -388,7 +388,7 @@ export struct ProfileTab {
   groupLabel(title: string) {
     Text(title)
       .fontSize(13)
-      .fontColor('#1A1A1A')
+      .fontColor($r('app.color.text_main'))
       .width('100%')
       .margin({ top: 14 })
   }
@@ -401,17 +401,17 @@ export struct ProfileTab {
         .height(60)
         .fontSize(this.loggedIn ? 30 : 26)
         .textAlign(TextAlign.Center)
-        .backgroundColor('#00A86B1A')
+        .backgroundColor($r('app.color.brand_bg1A'))
         .borderRadius(30)
       if (this.loggedIn) {
         Column() {
           Text(this.nickname)
             .fontSize(18)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#1A1A1A')
+            .fontColor($r('app.color.text_main'))
           Text('已登录用户')
             .fontSize(12)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .margin({ top: 4 })
         }
         .alignItems(HorizontalAlign.Start)
@@ -421,10 +421,10 @@ export struct ProfileTab {
           Text('未登录，请登录')
             .fontSize(18)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#1A1A1A')
+            .fontColor($r('app.color.text_main'))
           Text('登录后同步健康数据、收藏与偏好')
             .fontSize(12)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .margin({ top: 4 })
         }
         .alignItems(HorizontalAlign.Start)
@@ -432,12 +432,12 @@ export struct ProfileTab {
         .layoutWeight(1)
         Text('›')
           .fontSize(20)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
       }
     }
     .width('92%')
     .padding(18)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 6 })
     .onClick(() => {
@@ -455,12 +455,12 @@ export struct ProfileTab {
           .fontSize(18)
         Text('我的收藏')
           .fontSize(15)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .margin({ left: 12 })
         Blank()
         Text('›')
           .fontSize(16)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
       }
       .width('100%')
       .height(48)
@@ -468,19 +468,19 @@ export struct ProfileTab {
         this.enterFavorite();
       })
 
-      Divider().color('#F0F0F0')
+      Divider().color($r('app.color.bg_divider'))
 
       Row() {
         Text('🕒')
           .fontSize(18)
         Text('浏览历史')
           .fontSize(15)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .margin({ left: 12 })
         Blank()
         Text('›')
           .fontSize(16)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
       }
       .width('100%')
       .height(48)
@@ -488,19 +488,19 @@ export struct ProfileTab {
         this.enterHistory();
       })
 
-      Divider().color('#F0F0F0')
+      Divider().color($r('app.color.bg_divider'))
 
       Row() {
         Text('👤')
           .fontSize(18)
         Text('用户管理')
           .fontSize(15)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .margin({ left: 12 })
         Blank()
         Text('›')
           .fontSize(16)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
       }
       .width('100%')
       .height(48)
@@ -510,7 +510,7 @@ export struct ProfileTab {
     }
     .width('92%')
     .padding({ left: 18, right: 18, top: 6, bottom: 6 })
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 12 })
   }
@@ -522,11 +522,11 @@ export struct ProfileTab {
         Text('饮食偏好')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         Text(this.prefExpanded ? '收起' : '编辑')
           .fontSize(13)
-          .fontColor('#00A86B')
+          .fontColor($r('app.color.brand'))
           .onClick(() => {
             if (!AuthGuard.requireAccount()) {
               return;
@@ -539,13 +539,13 @@ export struct ProfileTab {
       Row() {
         Text('健康目标：' + this.goalSummary())
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
         Text(this.tasteSel.length > 0 ? ' · 口味 ' + this.tasteSel.length + ' 项' : '')
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
         Text(this.cuisineSel.length > 0 ? ' · 菜系 ' + this.cuisineSel.length + ' 项' : '')
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
       }
       .width('100%')
       .margin({ top: 6 })
@@ -585,7 +585,7 @@ export struct ProfileTab {
               .layoutWeight(1)
               .height(40)
               .fontSize(14)
-              .backgroundColor('#F5F6F7')
+              .backgroundColor($r('app.color.bg_input'))
               .borderRadius(8)
               .padding({ left: 10, right: 10 })
               .onChange((value: string) => {
@@ -593,12 +593,12 @@ export struct ProfileTab {
               })
             Text('-')
               .fontSize(14)
-              .fontColor('#999999')
+              .fontColor($r('app.color.text_sub'))
             TextInput({ placeholder: '最高价', text: this.budgetMaxText })
               .layoutWeight(1)
               .height(40)
               .fontSize(14)
-              .backgroundColor('#F5F6F7')
+              .backgroundColor($r('app.color.bg_input'))
               .borderRadius(8)
               .padding({ left: 10, right: 10 })
               .onChange((value: string) => {
@@ -612,8 +612,8 @@ export struct ProfileTab {
             .width('100%')
             .height(40)
             .fontSize(14)
-            .fontColor('#FFFFFF')
-            .backgroundColor('#00A86B')
+            .fontColor($r('app.color.text_on_brand'))
+            .backgroundColor($r('app.color.brand'))
             .borderRadius(20)
             .margin({ top: 16 })
             .onClick(() => {
@@ -625,7 +625,7 @@ export struct ProfileTab {
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 12 })
   }
@@ -636,13 +636,13 @@ export struct ProfileTab {
       Text('我的忌口')
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
         .width('100%')
 
       if (this.avoidList.length === 0) {
         Text('暂无记录，添加忌口后推荐将自动避开相关菜品')
           .fontSize(12)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
           .width('100%')
           .margin({ top: 8 })
       } else {
@@ -659,7 +659,7 @@ export struct ProfileTab {
 
       Text('快捷添加')
         .fontSize(12)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .width('100%')
         .margin({ top: 14 })
       Flex({ wrap: FlexWrap.Wrap }) {
@@ -677,7 +677,7 @@ export struct ProfileTab {
           .layoutWeight(1)
           .height(40)
           .fontSize(14)
-          .backgroundColor('#F5F6F7')
+          .backgroundColor($r('app.color.bg_input'))
           .borderRadius(8)
           .padding({ left: 10, right: 10 })
           .onChange((value: string) => {
@@ -686,8 +686,8 @@ export struct ProfileTab {
         Button('添加')
           .height(40)
           .fontSize(14)
-          .fontColor('#FFFFFF')
-          .backgroundColor('#00A86B')
+          .fontColor($r('app.color.text_on_brand'))
+          .backgroundColor($r('app.color.brand'))
           .borderRadius(8)
           .onClick(() => {
             this.addAvoid(this.avoidInput);
@@ -698,7 +698,7 @@ export struct ProfileTab {
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 12 })
   }
@@ -710,17 +710,17 @@ export struct ProfileTab {
         Text('健康数据授权')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         Text(this.authStatus === 1 ? '已授权' : '未授权')
           .fontSize(12)
-          .fontColor(this.authStatus === 1 ? '#00A86B' : '#999999')
+          .fontColor(this.authStatus === 1 ? $r('app.color.brand') : $r('app.color.text_sub'))
       }
       .width('100%')
 
       Text('授权华为运动健康后，可同步手表步数、睡眠、心率等数据，获得更精准的饮食推荐')
         .fontSize(12)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .width('100%')
         .margin({ top: 8 })
 
@@ -729,8 +729,8 @@ export struct ProfileTab {
           .width('100%')
           .height(40)
           .fontSize(14)
-          .fontColor('#E5484D')
-          .backgroundColor('#FFF0F0')
+          .fontColor($r('app.color.danger'))
+          .backgroundColor($r('app.color.danger_bg'))
           .borderRadius(20)
           .margin({ top: 14 })
           .enabled(!this.authorizing)
@@ -742,8 +742,8 @@ export struct ProfileTab {
           .width('100%')
           .height(40)
           .fontSize(14)
-          .fontColor('#FFFFFF')
-          .backgroundColor('#00A86B')
+          .fontColor($r('app.color.text_on_brand'))
+          .backgroundColor($r('app.color.brand'))
           .borderRadius(20)
           .margin({ top: 14 })
           .enabled(!this.authorizing)
@@ -754,7 +754,7 @@ export struct ProfileTab {
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 12 })
   }
@@ -765,11 +765,11 @@ export struct ProfileTab {
       Row() {
         Text('关于膳衡')
           .fontSize(15)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         Text('v1.0.0')
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
       }
       .width('100%')
       .height(50)
@@ -779,7 +779,7 @@ export struct ProfileTab {
     }
     .width('92%')
     .padding({ left: 18, right: 18 })
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 14 })
   }
@@ -790,7 +790,7 @@ export struct ProfileTab {
         Text('我的')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 14, bottom: 8 })
@@ -814,6 +814,6 @@ export struct ProfileTab {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

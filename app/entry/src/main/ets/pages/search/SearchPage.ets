@@ -73,7 +73,7 @@ struct SearchPage {
       Row() {
         Text('‹')
           .fontSize(28)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .width(36)
           .onClick(() => {
             router.back();
@@ -92,7 +92,7 @@ struct SearchPage {
           if (this.keyword !== '') {
             Text('✕')
               .fontSize(16)
-              .fontColor('#999999')
+              .fontColor($r('app.color.text_sub'))
               .width(30)
               .textAlign(TextAlign.Center)
               .onClick(() => {
@@ -101,8 +101,8 @@ struct SearchPage {
           }
           Text('搜索')
             .fontSize(14)
-            .fontColor('#FFFFFF')
-            .backgroundColor('#00A86B')
+            .fontColor($r('app.color.text_on_brand'))
+            .backgroundColor($r('app.color.brand'))
             .padding({ left: 14, right: 14, top: 8, bottom: 8 })
             .borderRadius(18)
             .margin({ left: 8 })
@@ -114,7 +114,7 @@ struct SearchPage {
         .layoutWeight(1)
         .height(42)
         .padding({ left: 12, right: 6 })
-        .backgroundColor('#EBEDEF')
+        .backgroundColor($r('app.color.bg_input'))
         .borderRadius(21)
       }
       .width('100%')
@@ -127,7 +127,7 @@ struct SearchPage {
             .fontSize(48)
           Text('输入关键词搜索你想要的菜品')
             .fontSize(14)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .margin({ top: 12 })
         }
         .width('100%')
@@ -135,7 +135,7 @@ struct SearchPage {
         .justifyContent(FlexAlign.Center)
       } else if (this.loading && this.dishes.length === 0) {
         Column() {
-          LoadingProgress().width(36).height(36).color('#00A86B')
+          LoadingProgress().width(36).height(36).color($r('app.color.brand'))
         }
         .width('100%')
         .layoutWeight(1)
@@ -146,7 +146,7 @@ struct SearchPage {
         Column() {
           Text(`「${this.keyword}」共 ${this.dishes.length} 道`)
             .fontSize(13)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .width('100%')
             .padding({ left: 16, right: 16, top: 10, bottom: 4 })
           List({ space: 12 }) {
@@ -171,6 +171,6 @@ struct SearchPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

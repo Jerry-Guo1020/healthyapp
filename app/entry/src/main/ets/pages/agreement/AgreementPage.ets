@@ -38,7 +38,7 @@ struct AgreementPage {
       Row() {
         Text('‹')
           .fontSize(28)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_main'))
           .width(40)
           .onClick(() => {
             router.back();
@@ -46,7 +46,7 @@ struct AgreementPage {
         Text(this.title)
           .fontSize(17)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#222222')
+          .fontColor($r('app.color.text_main'))
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
         Row()
@@ -65,7 +65,7 @@ struct AgreementPage {
         Scroll() {
           Text(this.content)
             .fontSize(15)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_main'))
             .lineHeight(24)
             .width('100%')
         }
@@ -77,6 +77,6 @@ struct AgreementPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
   }
 }

@@ -57,7 +57,7 @@ export struct FoodRecognizeTab {
         .fontSize(22)
       Text(label)
         .fontSize(11)
-        .fontColor('#555555')
+        .fontColor($r('app.color.text_mid'))
         .margin({ top: 6 })
     }
     .layoutWeight(1)
@@ -69,37 +69,37 @@ export struct FoodRecognizeTab {
       Text('怎么使用')
         .fontSize(14)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
         .width('100%')
       Row() {
         this.stepItem('📷', '拍照 / 选图')
         Text('›')
           .fontSize(18)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
         this.stepItem('🔍', '自动识别')
         Text('›')
           .fontSize(18)
-          .fontColor('#BBBBBB')
+          .fontColor($r('app.color.text_hint'))
         this.stepItem('🥗', '匹配推荐')
       }
       .width('100%')
       .margin({ top: 14 })
       Text('拍下食物照片，自动识别菜品名称与热量，并匹配膳衡菜品，给出更健康的选择。')
         .fontSize(12)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .lineHeight(18)
         .width('100%')
         .margin({ top: 12 })
       Text('• 支持常见中式菜品、主食、水果等\n• 照片仅用于本次识别，不会长期存储')
         .fontSize(11)
-        .fontColor('#BBBBBB')
+        .fontColor($r('app.color.text_hint'))
         .lineHeight(18)
         .width('100%')
         .margin({ top: 10 })
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 8 })
   }
@@ -113,14 +113,14 @@ export struct FoodRecognizeTab {
           .height(220)
           .objectFit(ImageFit.Contain)
           .borderRadius(12)
-          .backgroundColor('#FFFFFF')
+          .backgroundColor($r('app.color.bg_card'))
         Row({ space: 10 }) {
           Button('重新选择')
             .layoutWeight(1)
             .height(40)
             .fontSize(14)
-            .fontColor('#555555')
-            .backgroundColor('#F0F2F3')
+            .fontColor($r('app.color.text_mid'))
+            .backgroundColor($r('app.color.bg_chip'))
             .borderRadius(20)
             .onClick(() => {
               this.pickImage();
@@ -129,8 +129,8 @@ export struct FoodRecognizeTab {
             .layoutWeight(1)
             .height(40)
             .fontSize(14)
-            .fontColor('#FFFFFF')
-            .backgroundColor('#00A86B')
+            .fontColor($r('app.color.text_on_brand'))
+            .backgroundColor($r('app.color.brand'))
             .borderRadius(20)
             .enabled(!this.recognizing)
             .onClick(() => {
@@ -145,13 +145,13 @@ export struct FoodRecognizeTab {
             .fontSize(50)
           Text('拍摄或选择一张食物照片')
             .fontSize(14)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .margin({ top: 10 })
           Button('选择图片')
             .height(42)
             .fontSize(14)
-            .fontColor('#FFFFFF')
-            .backgroundColor('#00A86B')
+            .fontColor($r('app.color.text_on_brand'))
+            .backgroundColor($r('app.color.brand'))
             .borderRadius(20)
             .margin({ top: 16 })
             .onClick(() => {
@@ -161,7 +161,7 @@ export struct FoodRecognizeTab {
         .width('100%')
         .height(220)
         .justifyContent(FlexAlign.Center)
-        .backgroundColor('#FFFFFF')
+        .backgroundColor($r('app.color.bg_card'))
         .borderRadius(12)
       }
     }
@@ -175,19 +175,19 @@ export struct FoodRecognizeTab {
       Text('识别结果')
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
         .width('100%')
 
       Row() {
         Text(r.name)
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         if (r.hasCalorie && r.calorie !== '') {
           Text(r.calorie)
             .fontSize(13)
-            .fontColor('#F5A623')
+            .fontColor($r('app.color.orange'))
         }
       }
       .width('100%')
@@ -196,14 +196,14 @@ export struct FoodRecognizeTab {
       if (r.matchedDish != null) {
         Text('已匹配到膳衡菜品')
           .fontSize(13)
-          .fontColor('#00A86B')
+          .fontColor($r('app.color.brand'))
           .width('100%')
           .margin({ top: 14, bottom: 8 })
         DishCard({ dish: r.matchedDish })
       } else {
         Text('未匹配到本地菜品，为你推荐以下健康选择')
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
           .width('100%')
           .margin({ top: 14, bottom: 8 })
       }
@@ -211,7 +211,7 @@ export struct FoodRecognizeTab {
       if (r.recommends.length > 0) {
         Text('为你推荐')
           .fontSize(13)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .width('100%')
           .margin({ top: 14, bottom: 8 })
         Column({ space: 10 }) {
@@ -232,7 +232,7 @@ export struct FoodRecognizeTab {
         Text('拍照识食')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 14, bottom: 8 })
@@ -254,6 +254,6 @@ export struct FoodRecognizeTab {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

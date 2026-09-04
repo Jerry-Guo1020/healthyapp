@@ -68,8 +68,8 @@ struct DishDetailPage {
   tagChipBuilder(text: string) {
     Text(text)
       .fontSize(11)
-      .fontColor('#00A86B')
-      .backgroundColor('#00A86B14')
+      .fontColor($r('app.color.brand'))
+      .backgroundColor($r('app.color.brand_bg14'))
       .padding({ left: 8, right: 8, top: 4, bottom: 4 })
       .borderRadius(6)
   }
@@ -90,7 +90,7 @@ struct DishDetailPage {
           .width('100%')
           .height(240)
           .justifyContent(FlexAlign.Center)
-          .backgroundColor('#EAF5EF')
+          .backgroundColor($r('app.color.brand_bg'))
         }
         // 返回按钮
         Text('‹')
@@ -99,7 +99,7 @@ struct DishDetailPage {
           .fontSize(26)
           .textAlign(TextAlign.Center)
           .backgroundColor('#66000000')
-          .fontColor('#FFFFFF')
+          .fontColor($r('app.color.text_on_brand'))
           .borderRadius(19)
           .position({ x: 14, y: 14 })
           .onClick(() => {
@@ -111,7 +111,7 @@ struct DishDetailPage {
 
       if (this.loading) {
         Column() {
-          LoadingProgress().width(40).height(40).color(COLOR_PRIMARY)
+          LoadingProgress().width(40).height(40).color($r('app.color.brand'))
         }
         .width('100%')
         .layoutWeight(1)
@@ -125,11 +125,11 @@ struct DishDetailPage {
                 Text(this.dish.name)
                   .fontSize(20)
                   .fontWeight(FontWeight.Bold)
-                  .fontColor('#1A1A1A')
+                  .fontColor($r('app.color.text_main'))
                   .layoutWeight(1)
                 Text(`❤ ${this.favoriteCount}`)
                   .fontSize(13)
-                  .fontColor('#999999')
+                  .fontColor($r('app.color.text_sub'))
               }
               .width('100%')
 
@@ -163,7 +163,7 @@ struct DishDetailPage {
             }
             .width('92%')
             .padding(16)
-            .backgroundColor('#FFFFFF')
+            .backgroundColor($r('app.color.bg_card'))
             .borderRadius(14)
             .margin({ top: 14 })
 
@@ -173,17 +173,17 @@ struct DishDetailPage {
                 Text('菜品介绍')
                   .fontSize(14)
                   .fontWeight(FontWeight.Medium)
-                  .fontColor('#1A1A1A')
+                  .fontColor($r('app.color.text_main'))
                 Text(this.dish.description)
                   .fontSize(14)
-                  .fontColor('#666666')
+                  .fontColor($r('app.color.text_mid'))
                   .lineHeight(22)
                   .margin({ top: 8 })
                   .width('100%')
               }
               .width('92%')
               .padding(16)
-              .backgroundColor('#FFFFFF')
+              .backgroundColor($r('app.color.bg_card'))
               .borderRadius(14)
               .margin({ top: 12 })
               .alignItems(HorizontalAlign.Start)
@@ -195,17 +195,17 @@ struct DishDetailPage {
                 Text('主要食材')
                   .fontSize(14)
                   .fontWeight(FontWeight.Medium)
-                  .fontColor('#1A1A1A')
+                  .fontColor($r('app.color.text_main'))
                 Text(this.dish.ingredients)
                   .fontSize(14)
-                  .fontColor('#666666')
+                  .fontColor($r('app.color.text_mid'))
                   .lineHeight(22)
                   .margin({ top: 8 })
                   .width('100%')
               }
               .width('92%')
               .padding(16)
-              .backgroundColor('#FFFFFF')
+              .backgroundColor($r('app.color.bg_card'))
               .borderRadius(14)
               .margin({ top: 12 })
               .alignItems(HorizontalAlign.Start)
@@ -216,7 +216,7 @@ struct DishDetailPage {
               Text('营养与口味')
                 .fontSize(14)
                 .fontWeight(FontWeight.Medium)
-                .fontColor('#1A1A1A')
+                .fontColor($r('app.color.text_main'))
               Row({ space: 10 }) {
                 this.metricItem('热量', `${this.dish.calorie} 千卡`)
                 this.metricItem('辣度', this.dish.spicyLevel > 0 ? `⭐${this.dish.spicyLevel}` : '不辣')
@@ -235,20 +235,20 @@ struct DishDetailPage {
                 .margin({ top: 12 })
                 Text('* 三大营养素为每100g含量')
                   .fontSize(10)
-                  .fontColor('#BBBBBB')
+                  .fontColor($r('app.color.text_hint'))
                   .margin({ top: 6 })
                   .width('100%')
               } else {
                 Text('三大营养素暂未录入，可在管理端「联网补全」')
                   .fontSize(11)
-                  .fontColor('#BBBBBB')
+                  .fontColor($r('app.color.text_hint'))
                   .margin({ top: 10 })
                   .width('100%')
               }
             }
             .width('92%')
             .padding(16)
-            .backgroundColor('#FFFFFF')
+            .backgroundColor($r('app.color.bg_card'))
             .borderRadius(14)
             .margin({ top: 12, bottom: 90 })
           }
@@ -265,8 +265,8 @@ struct DishDetailPage {
           .width('100%')
           .height(46)
           .fontSize(15)
-          .fontColor('#FFFFFF')
-          .backgroundColor(this.favorite ? '#E5484D' : COLOR_PRIMARY)
+          .fontColor($r('app.color.text_on_brand'))
+          .backgroundColor(this.favorite ? $r('app.color.danger') : $r('app.color.brand'))
           .onClick(() => {
             this.toggleFavorite();
           })
@@ -274,11 +274,11 @@ struct DishDetailPage {
       .width('100%')
       .height(66)
       .padding({ left: 16, right: 16 })
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.bg_card'))
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 
   private oilText(): string {
@@ -299,10 +299,10 @@ struct DishDetailPage {
     Column() {
       Text(label)
         .fontSize(12)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
       Text(value)
         .fontSize(14)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
         .fontWeight(FontWeight.Medium)
         .margin({ top: 4 })
     }

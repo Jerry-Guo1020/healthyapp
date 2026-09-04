@@ -3,6 +3,82 @@
     {
       "name": "start_window_background",
       "value": "#000000"
+    },
+    {
+      "name": "bg_page",
+      "value": "#121212"
+    },
+    {
+      "name": "bg_card",
+      "value": "#1E1E1E"
+    },
+    {
+      "name": "bg_input",
+      "value": "#2A2A2A"
+    },
+    {
+      "name": "bg_chip",
+      "value": "#2B2B2B"
+    },
+    {
+      "name": "bg_divider",
+      "value": "#2C2C2C"
+    },
+    {
+      "name": "text_main",
+      "value": "#E8E8E8"
+    },
+    {
+      "name": "text_mid",
+      "value": "#C4C4C4"
+    },
+    {
+      "name": "text_sub",
+      "value": "#909090"
+    },
+    {
+      "name": "text_hint",
+      "value": "#5A5A5A"
+    },
+    {
+      "name": "text_on_brand",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "brand",
+      "value": "#00C081"
+    },
+    {
+      "name": "brand_bg",
+      "value": "#123B2B"
+    },
+    {
+      "name": "brand_bg12",
+      "value": "#00C08122"
+    },
+    {
+      "name": "brand_bg14",
+      "value": "#00C08128"
+    },
+    {
+      "name": "brand_bg1A",
+      "value": "#00C08130"
+    },
+    {
+      "name": "orange",
+      "value": "#FFB84D"
+    },
+    {
+      "name": "orange_bg",
+      "value": "#3A2A10"
+    },
+    {
+      "name": "danger",
+      "value": "#FF6B6B"
+    },
+    {
+      "name": "danger_bg",
+      "value": "#3A1E1E"
     }
   ]
 }

@@ -53,7 +53,7 @@ struct HistoryPage {
       Row() {
         Text('‹')
           .fontSize(28)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .width(40)
           .onClick(() => {
             router.back();
@@ -61,7 +61,7 @@ struct HistoryPage {
         Text('浏览历史')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
       }
       .width('100%')
       .height(50)
@@ -69,7 +69,7 @@ struct HistoryPage {
 
       if (this.loading && this.list.length === 0) {
         Column() {
-          LoadingProgress().width(36).height(36).color('#00A86B')
+          LoadingProgress().width(36).height(36).color($r('app.color.brand'))
         }
         .width('100%')
         .layoutWeight(1)
@@ -83,7 +83,7 @@ struct HistoryPage {
               Column() {
                 Text(`浏览于 ${h.browseTime}`)
                   .fontSize(11)
-                  .fontColor('#BBBBBB')
+                  .fontColor($r('app.color.text_hint'))
                   .width('100%')
                   .margin({ bottom: 6 })
                 DishCard({ dish: h.dish })
@@ -103,6 +103,6 @@ struct HistoryPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

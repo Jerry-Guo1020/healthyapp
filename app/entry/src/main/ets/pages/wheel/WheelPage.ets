@@ -164,7 +164,7 @@ struct WheelPage {
       // 顶部指针
       Text('▼')
         .fontSize(26)
-        .fontColor('#E5484D')
+        .fontColor($r('app.color.danger'))
         .position({ x: this.wheelSize / 2 - 13, y: -14 })
     }
     .width(this.wheelSize)
@@ -177,23 +177,23 @@ struct WheelPage {
       Column() {
         Text('🎉 就吃它！')
           .fontSize(14)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
         Text(this.candidates[this.resultIndex].name)
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .margin({ top: 8 })
         Text(`${this.candidates[this.resultIndex].calorie} 千卡 · ${this.candidates[this.resultIndex].categoryName}`)
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
           .margin({ top: 6 })
         Row({ space: 14 }) {
           Button('再抽一次')
             .layoutWeight(1)
             .height(44)
             .fontSize(15)
-            .fontColor(COLOR_PRIMARY)
-            .backgroundColor('#00A86B14')
+            .fontColor($r('app.color.brand'))
+            .backgroundColor($r('app.color.brand_bg14'))
             .onClick(() => {
               this.refreshBatch();
             })
@@ -201,8 +201,8 @@ struct WheelPage {
             .layoutWeight(1)
             .height(44)
             .fontSize(15)
-            .fontColor('#FFFFFF')
-            .backgroundColor(COLOR_PRIMARY)
+            .fontColor($r('app.color.text_on_brand'))
+            .backgroundColor($r('app.color.brand'))
             .onClick(() => {
               this.goDetail();
             })
@@ -212,7 +212,7 @@ struct WheelPage {
       }
       .width('88%')
       .padding(20)
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.bg_card'))
       .borderRadius(16)
       .margin({ top: 24 })
     }
@@ -223,7 +223,7 @@ struct WheelPage {
       Row() {
         Text('‹')
           .fontSize(28)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .width(40)
           .onClick(() => {
             router.back();
@@ -231,7 +231,7 @@ struct WheelPage {
         Text('转盘抽签')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
       }
       .width('100%')
       .height(50)
@@ -241,12 +241,12 @@ struct WheelPage {
         Column() {
           Text('今天吃什么？交给转盘')
             .fontSize(14)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .margin({ top: 14, bottom: 18 })
 
           if (this.loading) {
             Column() {
-              LoadingProgress().width(40).height(40).color(COLOR_PRIMARY)
+              LoadingProgress().width(40).height(40).color($r('app.color.brand'))
             }
             .width('100%')
             .height(300)
@@ -257,7 +257,7 @@ struct WheelPage {
                 .fontSize(48)
               Text('暂无可抽菜品')
                 .fontSize(15)
-                .fontColor('#999999')
+                .fontColor($r('app.color.text_sub'))
                 .margin({ top: 10 })
               Button('重试')
                 .width(120)
@@ -278,8 +278,8 @@ struct WheelPage {
               .height(52)
               .fontSize(17)
               .fontWeight(FontWeight.Medium)
-              .fontColor('#FFFFFF')
-              .backgroundColor(this.spinning ? '#9AD6BC' : COLOR_PRIMARY)
+              .fontColor($r('app.color.text_on_brand'))
+              .backgroundColor(this.spinning ? $r('app.color.brand_bg') : $r('app.color.brand'))
               .borderRadius(26)
               .margin({ top: 28 })
               .onClick(() => {
@@ -291,7 +291,7 @@ struct WheelPage {
             Row() {
               Text('换一批')
                 .fontSize(14)
-                .fontColor('#00A86B')
+                .fontColor($r('app.color.brand'))
             }
             .margin({ top: 18 })
             .onClick(() => {
@@ -308,6 +308,6 @@ struct WheelPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

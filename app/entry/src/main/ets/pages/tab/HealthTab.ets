@@ -231,8 +231,8 @@ export struct HealthTab {
   pickChip(label: string, value: number, kind: number) {
     Text(label)
       .fontSize(13)
-      .fontColor(this.selected(kind, value) ? '#FFFFFF' : '#555555')
-      .backgroundColor(this.selected(kind, value) ? '#00A86B' : '#F0F2F3')
+      .fontColor(this.selected(kind, value) ? $r('app.color.text_on_brand') : $r('app.color.text_mid'))
+      .backgroundColor(this.selected(kind, value) ? $r('app.color.brand') : $r('app.color.bg_chip'))
       .padding({ left: 16, right: 16, top: 7, bottom: 7 })
       .borderRadius(16)
       .onClick(() => {
@@ -251,7 +251,7 @@ export struct HealthTab {
     Column() {
       Text(title)
         .fontSize(13)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
         .width('100%')
       Row({ space: 10 }) {
         if (kind === 0) {
@@ -285,21 +285,21 @@ export struct HealthTab {
       Text('登录后开启健康分析')
         .fontSize(17)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
         .margin({ top: 12 })
       Text('结合步数、睡眠、心率等健康数据')
         .fontSize(13)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .margin({ top: 8 })
       Text('为你科学推荐每一餐')
         .fontSize(13)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
       Button('去登录')
         .width('80%')
         .height(44)
         .fontSize(15)
-        .fontColor('#FFFFFF')
-        .backgroundColor('#00A86B')
+        .fontColor($r('app.color.text_on_brand'))
+        .backgroundColor($r('app.color.brand'))
         .borderRadius(22)
         .margin({ top: 20 })
         .onClick(() => {
@@ -308,7 +308,7 @@ export struct HealthTab {
     }
     .width('92%')
     .padding({ top: 30, bottom: 30 })
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 8 })
   }
@@ -322,11 +322,11 @@ export struct HealthTab {
         Text('健康分析')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         Text('数据驱动 · 饮食联动')
           .fontSize(11)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
       }
       .width('100%')
 
@@ -335,7 +335,7 @@ export struct HealthTab {
           LoadingProgress()
             .width(28)
             .height(28)
-            .color('#00A86B')
+            .color($r('app.color.brand'))
         }
         .width('100%')
         .justifyContent(FlexAlign.Center)
@@ -346,11 +346,11 @@ export struct HealthTab {
             .fontSize(44)
           Text('暂无健康数据')
             .fontSize(15)
-            .fontColor('#1A1A1A')
+            .fontColor($r('app.color.text_main'))
             .margin({ top: 8 })
           Text('同步华为运动健康或手动记录，生成个性化分析')
             .fontSize(12)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .margin({ top: 4 })
         }
         .width('100%')
@@ -365,7 +365,7 @@ export struct HealthTab {
               .fontColor(this.scoreColor(this.analysis.totalScore))
             Text('综合评分')
               .fontSize(12)
-              .fontColor('#999999')
+              .fontColor($r('app.color.text_sub'))
               .margin({ top: 2 })
           }
           .alignItems(HorizontalAlign.Center)
@@ -375,12 +375,12 @@ export struct HealthTab {
               .fontSize(14)
               .fontWeight(FontWeight.Medium)
               .fontColor(this.scoreColor(this.analysis.totalScore))
-              .backgroundColor('#F0F2F3')
+              .backgroundColor($r('app.color.bg_chip'))
               .padding({ left: 10, right: 10, top: 4, bottom: 4 })
               .borderRadius(12)
             Text(this.analysis.summary)
               .fontSize(12)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_mid'))
               .margin({ top: 8 })
               .maxLines(2)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -397,21 +397,21 @@ export struct HealthTab {
             .fontSize(14)
           Text(this.analysis.dietAdvice)
             .fontSize(12)
-            .fontColor('#666666')
+            .fontColor($r('app.color.text_mid'))
             .layoutWeight(1)
             .maxLines(3)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
         .width('100%')
         .padding(10)
-        .backgroundColor('#F0F8F3')
+        .backgroundColor($r('app.color.brand_bg'))
         .borderRadius(8)
         .margin({ top: 14 })
       }
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 6 })
   }
@@ -425,16 +425,16 @@ export struct HealthTab {
         Column() {
           Text(m.label)
             .fontSize(11)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
           Row() {
             Text(m.value)
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor('#1A1A1A')
+              .fontColor($r('app.color.text_main'))
             if (m.unit !== '') {
               Text(m.unit)
                 .fontSize(11)
-                .fontColor('#999999')
+                .fontColor($r('app.color.text_sub'))
                 .margin({ left: 2 })
             }
           }
@@ -447,7 +447,7 @@ export struct HealthTab {
         Text(m.levelText)
           .fontSize(11)
           .fontColor(this.levelColor(m.level))
-          .backgroundColor('#F0F2F3')
+          .backgroundColor($r('app.color.bg_chip'))
           .padding({ left: 8, right: 8, top: 3, bottom: 3 })
           .borderRadius(10)
       }
@@ -461,14 +461,14 @@ export struct HealthTab {
 
       Text(m.advice)
         .fontSize(11)
-        .fontColor('#888888')
+        .fontColor($r('app.color.text_sub'))
         .width('100%')
         .margin({ top: 8 })
         .maxLines(2)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .padding(12)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(12)
   }
 
@@ -497,18 +497,18 @@ export struct HealthTab {
         Text('华为运动健康同步')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         Text(HealthAuthState.isAuthorized() ? '已授权' : '未授权')
           .fontSize(12)
-          .fontColor(HealthAuthState.isAuthorized() ? '#00A86B' : '#999999')
+          .fontColor(HealthAuthState.isAuthorized() ? $r('app.color.brand') : $r('app.color.text_sub'))
       }
       .width('100%')
 
       if (this.syncMessage !== '') {
         Text(this.syncMessage)
           .fontSize(12)
-          .fontColor('#F5A623')
+          .fontColor($r('app.color.orange'))
           .width('100%')
           .margin({ top: 8 })
       }
@@ -527,8 +527,8 @@ export struct HealthTab {
         .width('100%')
         .height(42)
         .fontSize(14)
-        .fontColor('#FFFFFF')
-        .backgroundColor('#00A86B')
+        .fontColor($r('app.color.text_on_brand'))
+        .backgroundColor($r('app.color.brand'))
         .borderRadius(21)
         .margin({ top: 14 })
         .onClick(() => {
@@ -537,7 +537,7 @@ export struct HealthTab {
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 12 })
   }
@@ -548,10 +548,10 @@ export struct HealthTab {
       Text(value)
         .fontSize(15)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
       Text(name)
         .fontSize(11)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .margin({ top: 3 })
     }
     .layoutWeight(1)
@@ -566,10 +566,10 @@ export struct HealthTab {
       Text('手动记录今日状态')
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#1A1A1A')
+        .fontColor($r('app.color.text_main'))
       Text('无手表也能体验健康推荐；对接华为设备后可自动同步')
         .fontSize(11)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .margin({ top: 4 })
 
       this.optionGroup('昨晚睡眠', 0)
@@ -580,8 +580,8 @@ export struct HealthTab {
         .width('100%')
         .height(44)
         .fontSize(15)
-        .fontColor('#FFFFFF')
-        .backgroundColor('#00A86B')
+        .fontColor($r('app.color.text_on_brand'))
+        .backgroundColor($r('app.color.brand'))
         .borderRadius(22)
         .margin({ top: 18 })
         .onClick(() => {
@@ -590,7 +590,7 @@ export struct HealthTab {
     }
     .width('92%')
     .padding(16)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(14)
     .margin({ top: 12 })
   }
@@ -612,7 +612,7 @@ export struct HealthTab {
           .height(76)
           .fontSize(34)
           .textAlign(TextAlign.Center)
-          .backgroundColor('#EAF5EF')
+          .backgroundColor($r('app.color.brand_bg'))
           .borderRadius(10)
       }
 
@@ -620,7 +620,7 @@ export struct HealthTab {
         Text(item.dish.name)
           .fontSize(15)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
@@ -628,7 +628,7 @@ export struct HealthTab {
         if (item.reason !== '') {
           Text(`💡 ${item.reason}`)
             .fontSize(12)
-            .fontColor('#00A86B')
+            .fontColor($r('app.color.brand'))
             .maxLines(2)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .width('100%')
@@ -638,11 +638,11 @@ export struct HealthTab {
         Row() {
           Text(`${item.dish.calorie} 千卡`)
             .fontSize(11)
-            .fontColor('#F5A623')
+            .fontColor($r('app.color.orange'))
           if (item.dish.tags.length > 0) {
             Text(item.dish.tags.slice(0, 2).join(' · '))
               .fontSize(11)
-              .fontColor('#00A86B')
+              .fontColor($r('app.color.brand'))
               .margin({ left: 8 })
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -657,7 +657,7 @@ export struct HealthTab {
     }
     .width('100%')
     .padding(11)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(12)
     .onClick(() => {
       this.openDetail(item.dish);
@@ -671,11 +671,11 @@ export struct HealthTab {
         Text('为你推荐')
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Blank()
         Text(`${this.recommendations.length} 道`)
           .fontSize(12)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
       }
       .width('100%')
 
@@ -683,11 +683,11 @@ export struct HealthTab {
         Row() {
           Text(`⏰ ${this.todayReminder}`)
             .fontSize(12)
-            .fontColor('#F5A623')
+            .fontColor($r('app.color.orange'))
         }
         .width('100%')
         .padding(10)
-        .backgroundColor('#FFF7E6')
+        .backgroundColor($r('app.color.orange_bg'))
         .borderRadius(8)
         .margin({ top: 10 })
       }
@@ -697,7 +697,7 @@ export struct HealthTab {
           LoadingProgress()
             .width(28)
             .height(28)
-            .color('#00A86B')
+            .color($r('app.color.brand'))
         }
         .width('100%')
         .justifyContent(FlexAlign.Center)
@@ -722,7 +722,7 @@ export struct HealthTab {
         Text('健康')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 14, bottom: 8 })
@@ -753,6 +753,6 @@ export struct HealthTab {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

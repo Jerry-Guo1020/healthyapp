@@ -53,7 +53,7 @@ struct FavoritePage {
       Row() {
         Text('‹')
           .fontSize(28)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .width(40)
           .onClick(() => {
             router.back();
@@ -61,7 +61,7 @@ struct FavoritePage {
         Text('我的收藏')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
       }
       .width('100%')
       .height(50)
@@ -69,7 +69,7 @@ struct FavoritePage {
 
       if (this.loading && this.dishes.length === 0) {
         Column() {
-          LoadingProgress().width(36).height(36).color('#00A86B')
+          LoadingProgress().width(36).height(36).color($r('app.color.brand'))
         }
         .width('100%')
         .layoutWeight(1)
@@ -95,6 +95,6 @@ struct FavoritePage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

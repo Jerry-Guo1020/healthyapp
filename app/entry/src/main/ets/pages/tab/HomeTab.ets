@@ -80,8 +80,8 @@ export struct HomeTab {
   categoryChip(name: string, id: string) {
     Text(name)
       .fontSize(14)
-      .fontColor(this.selectedCategoryId === id ? '#FFFFFF' : '#555555')
-      .backgroundColor(this.selectedCategoryId === id ? '#00A86B' : '#FFFFFF')
+      .fontColor(this.selectedCategoryId === id ? $r('app.color.text_on_brand') : $r('app.color.text_mid'))
+      .backgroundColor(this.selectedCategoryId === id ? $r('app.color.brand') : $r('app.color.bg_card'))
       .padding({ left: 14, right: 14, top: 7, bottom: 7 })
       .borderRadius(17)
       .onClick(() => {
@@ -95,10 +95,10 @@ export struct HomeTab {
         Text('膳衡')
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
         Text(' 健康饮食 · 膳衡相伴')
           .fontSize(13)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 14, bottom: 10 })
@@ -108,17 +108,17 @@ export struct HomeTab {
           .fontSize(15)
         Text('搜索菜品名称')
           .fontSize(14)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_sub'))
           .layoutWeight(1)
           .margin({ left: 8 })
         Text('搜索')
           .fontSize(13)
-          .fontColor('#00A86B')
+          .fontColor($r('app.color.brand'))
       }
       .width('92%')
       .height(42)
       .padding({ left: 12, right: 12 })
-      .backgroundColor('#EBEDEF')
+      .backgroundColor($r('app.color.bg_input'))
       .borderRadius(21)
       .margin({ bottom: 10 })
       .onClick(() => {
@@ -131,7 +131,7 @@ export struct HomeTab {
         Text('转盘抽签')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#FFFFFF')
+          .fontColor($r('app.color.text_on_brand'))
           .margin({ left: 8 })
         Blank()
         Text('纠结？转一转决定吃什么 ›')
@@ -141,7 +141,7 @@ export struct HomeTab {
       .width('92%')
       .height(44)
       .padding({ left: 14, right: 14 })
-      .backgroundColor('#F5A623')
+      .backgroundColor($r('app.color.orange'))
       .borderRadius(12)
       .margin({ bottom: 10 })
       .onClick(() => {
@@ -168,7 +168,7 @@ export struct HomeTab {
           LoadingProgress()
             .width(36)
             .height(36)
-            .color('#00A86B')
+            .color($r('app.color.brand'))
         }
         .width('100%')
         .layoutWeight(1)
@@ -194,6 +194,6 @@ export struct HomeTab {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F7')
+    .backgroundColor($r('app.color.bg_page'))
   }
 }

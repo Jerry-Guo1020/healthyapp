@@ -51,6 +51,6 @@ struct MainPage {
       this.currentIndex = index;
     })
     .scrollable(false)
-    .barBackgroundColor('#FFFFFF')
+    .barBackgroundColor($r('app.color.bg_card'))
   }
 }

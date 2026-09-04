@@ -38,7 +38,7 @@ export struct DishCard {
           .height(94)
           .fontSize(40)
           .textAlign(TextAlign.Center)
-          .backgroundColor('#EAF5EF')
+          .backgroundColor($r('app.color.brand_bg'))
           .borderRadius(10)
       }
 
@@ -46,7 +46,7 @@ export struct DishCard {
         Text(this.dish.name)
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
+          .fontColor($r('app.color.text_main'))
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
@@ -54,7 +54,7 @@ export struct DishCard {
         if (this.dish.description !== '') {
           Text(this.dish.description)
             .fontSize(12)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
             .maxLines(2)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .width('100%')
@@ -66,8 +66,8 @@ export struct DishCard {
             ForEach(this.dish.tags.slice(0, 3), (tag: string) => {
               Text(tag)
                 .fontSize(10)
-                .fontColor('#00A86B')
-                .backgroundColor('#00A86B14')
+                .fontColor($r('app.color.brand'))
+                .backgroundColor($r('app.color.brand_bg14'))
                 .padding({ left: 6, right: 6, top: 2, bottom: 2 })
                 .borderRadius(4)
             }, (tag: string) => tag)
@@ -79,11 +79,11 @@ export struct DishCard {
         Row() {
           Text(`${this.dish.calorie} 千卡`)
             .fontSize(12)
-            .fontColor('#F5A623')
+            .fontColor($r('app.color.orange'))
           Blank()
           Text(`❤ ${this.dish.favoriteCount}`)
             .fontSize(12)
-            .fontColor('#999999')
+            .fontColor($r('app.color.text_sub'))
         }
         .width('100%')
         .margin({ top: 8 })
@@ -94,7 +94,7 @@ export struct DishCard {
     }
     .width('100%')
     .padding(11)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.bg_card'))
     .borderRadius(12)
     .onClick(() => {
       this.openDetail();

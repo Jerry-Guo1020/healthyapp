@@ -11,7 +11,7 @@ export struct EmptyView {
         .fontSize(52)
       Text(this.text)
         .fontSize(14)
-        .fontColor('#BBBBBB')
+        .fontColor($r('app.color.text_hint'))
         .margin({ top: 14 })
     }
     .width('100%')

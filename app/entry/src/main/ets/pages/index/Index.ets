@@ -41,14 +41,15 @@ struct Index {
       Text('膳衡')
         .fontSize(44)
         .fontWeight(FontWeight.Bold)
-        .fontColor('#00A86B')
+        .fontColor($r('app.color.brand'))
       Text('健康饮食 · 膳衡相伴')
         .fontSize(14)
-        .fontColor('#999999')
+        .fontColor($r('app.color.text_sub'))
         .margin({ top: 14 })
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.Center)
+    .backgroundColor($r('app.color.bg_page'))
   }
 }
