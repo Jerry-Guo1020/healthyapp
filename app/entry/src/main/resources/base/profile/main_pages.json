@@ -8,6 +8,7 @@
     "pages/FavoritePage",
     "pages/HistoryPage",
     "pages/SearchPage",
+    "pages/WheelPage",
     "pages/AboutPage",
     "pages/AccountManagePage"
   ]

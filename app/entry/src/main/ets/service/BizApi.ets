@@ -69,6 +69,15 @@ export class BizApi {
     return ApiClient.post<object>(`/history/${dishId}`, null);
   }
 
+  /** 随机菜品（转盘抽签，count 1-12） */
+  static async randomDishes(count: number, categoryId: string): Promise<ApiResult<DishVo[]>> {
+    let path = `/dishes/random?count=${count}`;
+    if (categoryId !== '') {
+      path += `&categoryId=${categoryId}`;
+    }
+    return ApiClient.get<DishVo[]>(path);
+  }
+
   /** 浏览历史列表 */
   static async historyPage(pageNum: number, pageSize: number): Promise<ApiResult<AppPageVo<BrowseHistoryVo>>> {
     return ApiClient.get<AppPageVo<BrowseHistoryVo>>(`/history?pageNum=${pageNum}&pageSize=${pageSize}`);

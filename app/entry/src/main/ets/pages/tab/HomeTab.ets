@@ -125,6 +125,29 @@ export struct HomeTab {
         router.pushUrl({ url: 'pages/SearchPage' });
       })
 
+      Row() {
+        Text('🎡')
+          .fontSize(20)
+        Text('转盘抽签')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor('#FFFFFF')
+          .margin({ left: 8 })
+        Blank()
+        Text('纠结？转一转决定吃什么 ›')
+          .fontSize(12)
+          .fontColor('#FDE9C8')
+      }
+      .width('92%')
+      .height(44)
+      .padding({ left: 14, right: 14 })
+      .backgroundColor('#F5A623')
+      .borderRadius(12)
+      .margin({ bottom: 10 })
+      .onClick(() => {
+        router.pushUrl({ url: 'pages/WheelPage' });
+      })
+
       Scroll() {
         Row({ space: 10 }) {
           this.categoryChip('全部', '')

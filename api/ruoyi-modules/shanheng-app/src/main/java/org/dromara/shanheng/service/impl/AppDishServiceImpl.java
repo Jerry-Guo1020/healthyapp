@@ -69,6 +69,18 @@ public class AppDishServiceImpl implements IAppDishService {
         return dishAssembler.assemble(Collections.singletonList(dish)).get(0);
     }
 
+    @Override
+    public List<DishVo> randomList(int count, Long categoryId) {
+        // 转盘最多 12 格，最少 1 格
+        count = Math.max(1, Math.min(count, 12));
+        LambdaQueryWrapper<ShDish> wrapper = new LambdaQueryWrapper<ShDish>()
+            .eq(ShDish::getStatus, 1)
+            .eq(categoryId != null, ShDish::getCategoryId, categoryId)
+            .last("ORDER BY RAND() LIMIT " + count);
+        List<ShDish> dishes = dishMapper.selectList(wrapper);
+        return dishAssembler.assemble(dishes);
+    }
+
     private void applySort(LambdaQueryWrapper<ShDish> wrapper, String sort) {
         if ("hot".equals(sort)) {
             wrapper.orderByDesc(ShDish::getViewCount);

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * App 菜品接口
  *
@@ -37,6 +39,15 @@ public class AppDishController {
         // 单页上限 50，防止恶意拉全量
         pageSize = Math.min(pageSize, 50);
         return R.ok(dishService.pageQuery(pageNum, pageSize, categoryId, tagId, keyword, isLight, sort));
+    }
+
+    /**
+     * 随机菜品（转盘抽签，count 1-12）
+     */
+    @GetMapping("/random")
+    public R<List<DishVo>> random(@RequestParam(defaultValue = "6") Integer count,
+                                  @RequestParam(required = false) Long categoryId) {
+        return R.ok(dishService.randomList(count, categoryId));
     }
 
     /**

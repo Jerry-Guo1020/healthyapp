@@ -21,4 +21,9 @@ public interface IAppDishService {
      */
     DishVo detail(Long id);
 
+    /**
+     * 随机菜品列表（转盘抽签用）
+     */
+    java.util.List<DishVo> randomList(int count, Long categoryId);
+
 }
