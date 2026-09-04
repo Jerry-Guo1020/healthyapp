@@ -1,10 +1,10 @@
 import { promptAction } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
-import { FoodApi } from '../service/FoodApi';
-import { ImageUtil } from '../common/ImageUtil';
-import { FoodRecognizeVo, DishVo } from '../model/ApiModels';
-import { DishCard } from '../components/DishCard';
+import { FoodApi } from '../../service/FoodApi';
+import { ImageUtil } from '../../common/ImageUtil';
+import { FoodRecognizeVo, DishVo } from '../../model/ApiModels';
+import { DishCard } from '../../components/DishCard';
 
 const TAG: string = 'FoodRecognizeTab';
 
@@ -116,7 +116,7 @@ export struct FoodRecognizeTab {
   }
 
   @Builder
-  resultArea() {
+  resultArea(r: FoodRecognizeVo) {
     Column() {
       Text('识别结果')
         .fontSize(16)
@@ -125,13 +125,13 @@ export struct FoodRecognizeTab {
         .width('100%')
 
       Row() {
-        Text(this.result!.name)
+        Text(r.name)
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor('#1A1A1A')
         Blank()
-        if (this.result!.hasCalorie && this.result!.calorie !== '') {
-          Text(this.result!.calorie)
+        if (r.hasCalorie && r.calorie !== '') {
+          Text(r.calorie)
             .fontSize(13)
             .fontColor('#F5A623')
         }
@@ -139,13 +139,13 @@ export struct FoodRecognizeTab {
       .width('100%')
       .margin({ top: 12 })
 
-      if (this.result!.matchedDish != null) {
+      if (r.matchedDish != null) {
         Text('已匹配到膳衡菜品')
           .fontSize(13)
           .fontColor('#00A86B')
           .width('100%')
           .margin({ top: 14, bottom: 8 })
-        DishCard({ dish: this.result!.matchedDish })
+        DishCard({ dish: r.matchedDish })
       } else {
         Text('未匹配到本地菜品，为你推荐以下健康选择')
           .fontSize(13)
@@ -154,14 +154,14 @@ export struct FoodRecognizeTab {
           .margin({ top: 14, bottom: 8 })
       }
 
-      if (this.result!.recommends.length > 0) {
+      if (r.recommends.length > 0) {
         Text('为你推荐')
           .fontSize(13)
           .fontColor('#1A1A1A')
           .width('100%')
           .margin({ top: 14, bottom: 8 })
         Column({ space: 10 }) {
-          ForEach(this.result!.recommends, (item: DishVo) => {
+          ForEach(r.recommends, (item: DishVo) => {
             DishCard({ dish: item })
           }, (item: DishVo) => item.id)
         }
@@ -187,7 +187,7 @@ export struct FoodRecognizeTab {
         Column() {
           this.imageArea()
           if (this.result != null) {
-            this.resultArea()
+            this.resultArea(this.result)
           }
         }
         .width('100%')

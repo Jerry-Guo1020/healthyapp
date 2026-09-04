@@ -23,7 +23,7 @@ struct WheelPage {
 
   @State candidates: DishVo[] = [];
   @State loading: boolean = true;
-  @State rotate: number = 0;
+  @State wheelRotate: number = 0;
   @State spinning: boolean = false;
   @State resultIndex: number = -1;
 
@@ -105,18 +105,18 @@ struct WheelPage {
     const target = Math.floor(Math.random() * n);
     const sectorDeg = 360 / n;
     // 让 target 扇形中心停在顶部指针处：顺时针补角
-    const remainder = (((-target * sectorDeg - this.rotate) % 360) + 360) % 360;
-    const rotTarget = this.rotate + 360 * 5 + remainder;
+    const remainder = (((-target * sectorDeg - this.wheelRotate) % 360) + 360) % 360;
+    const rotTarget = this.wheelRotate + 360 * 5 + remainder;
 
     animateTo({
       duration: 4200,
-      curve: Curve.Decelerate,
+      curve: Curve.EaseOut,
       onFinish: () => {
         this.spinning = false;
         this.resultIndex = target;
       }
     }, () => {
-      this.rotate = rotTarget;
+      this.wheelRotate = rotTarget;
     });
   }
 
@@ -145,7 +145,7 @@ struct WheelPage {
       Canvas(this.ctx)
         .width(this.wheelSize)
         .height(this.wheelSize)
-        .rotate({ angle: this.rotate })
+        .rotate({ angle: this.wheelRotate })
         .onReady(() => {
           this.drawWheel();
         })
