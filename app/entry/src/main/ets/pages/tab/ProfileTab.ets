@@ -1,7 +1,10 @@
 import { router, promptAction } from '@kit.ArkUI';
 import { UserSession } from '../../common/UserSession';
+import { HealthAuthState } from '../../common/HealthAuthState';
+import { AuthGuard } from '../../common/AuthGuard';
 import { UserApi, PreferenceBody, AvoidBody } from '../../service/UserApi';
-import { HealthApi, HealthAuthStatusBody } from '../../service/HealthApi';
+import { HealthApi } from '../../service/HealthApi';
+import { HuaweiHealthService } from '../../service/HuaweiHealthService';
 import { AvoidVo } from '../../model/ApiModels';
 
 // 健康目标选项（code + label；code 与后端 healthGoal 枚举一致）
@@ -53,8 +56,13 @@ export struct ProfileTab {
 
   refreshAll(): void {
     this.refreshUser();
+    this.refreshAuthState();
     this.loadPreference();
     this.loadAvoid();
+  }
+
+  refreshAuthState(): void {
+    this.authStatus = HealthAuthState.isAuthorized() ? 1 : 0;
   }
 
   refreshUser(): void {
@@ -168,15 +176,22 @@ export struct ProfileTab {
     if (this.authorizing) {
       return;
     }
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
+    const ctx = this.getUIContext().getHostContext();
+    if (ctx === undefined) {
+      promptAction.showToast({ message: '无法获取应用上下文' });
+      return;
+    }
     this.authorizing = true;
-    const b = new HealthAuthStatusBody();
-    b.status = 1;
-    b.authScope = ['STEPS', 'SLEEP', 'HEART_RATE', 'STRESS', 'ACTIVITY'];
-    HealthApi.authStatus(b).then((res) => {
+    HuaweiHealthService.syncAndArchive(ctx).then((r) => {
       this.authorizing = false;
-      if (res.code === 200) {
-        this.authStatus = 1;
-        promptAction.showToast({ message: '已授权华为运动健康' });
+      this.authStatus = HealthAuthState.isAuthorized() ? 1 : 0;
+      if (r.success) {
+        promptAction.showToast({ message: '已授权并同步运动健康' });
+      } else {
+        promptAction.showToast({ message: r.message });
       }
     });
   }
@@ -207,10 +222,33 @@ export struct ProfileTab {
     HealthApi.revokeAuth().then((res) => {
       this.authorizing = false;
       if (res.code === 200) {
+        HealthAuthState.setAuthorized(false);
         this.authStatus = 0;
         promptAction.showToast({ message: '已取消授权' });
       }
     });
+  }
+
+  enterFavorite(): void {
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
+    router.pushUrl({ url: 'pages/FavoritePage' });
+  }
+
+  enterHistory(): void {
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
+    router.pushUrl({ url: 'pages/HistoryPage' });
+  }
+
+  enterAccount(): void {
+    router.pushUrl({ url: 'pages/AccountManagePage' });
+  }
+
+  enterAbout(): void {
+    router.pushUrl({ url: 'pages/AboutPage' });
   }
 
   onLogout(): void {
@@ -365,6 +403,74 @@ export struct ProfileTab {
     .backgroundColor('#FFFFFF')
     .borderRadius(14)
     .margin({ top: 6 })
+  }
+
+  @Builder
+  menuCard() {
+    Column() {
+      Row() {
+        Text('❤️')
+          .fontSize(18)
+        Text('我的收藏')
+          .fontSize(15)
+          .fontColor('#1A1A1A')
+          .margin({ left: 12 })
+        Blank()
+        Text('›')
+          .fontSize(16)
+          .fontColor('#BBBBBB')
+      }
+      .width('100%')
+      .height(48)
+      .onClick(() => {
+        this.enterFavorite();
+      })
+
+      Divider().color('#F0F0F0')
+
+      Row() {
+        Text('🕒')
+          .fontSize(18)
+        Text('浏览历史')
+          .fontSize(15)
+          .fontColor('#1A1A1A')
+          .margin({ left: 12 })
+        Blank()
+        Text('›')
+          .fontSize(16)
+          .fontColor('#BBBBBB')
+      }
+      .width('100%')
+      .height(48)
+      .onClick(() => {
+        this.enterHistory();
+      })
+
+      Divider().color('#F0F0F0')
+
+      Row() {
+        Text('👤')
+          .fontSize(18)
+        Text('用户管理')
+          .fontSize(15)
+          .fontColor('#1A1A1A')
+          .margin({ left: 12 })
+        Blank()
+        Text('›')
+          .fontSize(16)
+          .fontColor('#BBBBBB')
+      }
+      .width('100%')
+      .height(48)
+      .onClick(() => {
+        this.enterAccount();
+      })
+    }
+    .width('92%')
+    .padding({ left: 18, right: 18, top: 6, bottom: 6 })
+    .backgroundColor('#FFFFFF')
+    .borderRadius(14)
+    .margin({ top: 12 })
   }
 
   @Builder
@@ -622,6 +728,9 @@ export struct ProfileTab {
       }
       .width('100%')
       .height(50)
+      .onClick(() => {
+        this.enterAbout();
+      })
     }
     .width('92%')
     .padding({ left: 18, right: 18 })
@@ -644,21 +753,11 @@ export struct ProfileTab {
       Scroll() {
         Column() {
           this.userCard()
+          this.menuCard()
           this.preferenceCard()
           this.avoidCard()
           this.healthAuthCard()
           this.aboutCard()
-
-          Button('退出登录')
-            .width('92%')
-            .height(48)
-            .fontSize(16)
-            .fontColor('#E5484D')
-            .backgroundColor('#FFFFFF')
-            .margin({ top: 16, bottom: 24 })
-            .onClick(() => {
-              this.onLogout();
-            })
         }
         .width('100%')
       }

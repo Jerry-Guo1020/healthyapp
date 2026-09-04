@@ -1,11 +1,11 @@
 import { HomeTab } from './tab/HomeTab';
+import { FoodRecognizeTab } from './tab/FoodRecognizeTab';
 import { HealthTab } from './tab/HealthTab';
-import { FavoriteTab } from './tab/FavoriteTab';
-import { HistoryTab } from './tab/HistoryTab';
 import { ProfileTab } from './tab/ProfileTab';
 
 /**
- * 主框架：底部四 Tab（首页 / 收藏 / 历史 / 我的）
+ * 主框架：底部四 Tab（首页 / 识食 / 健康 / 我的）
+ * 收藏、历史已移入「我的」作为子功能；拍照识食提升为底部主功能。
  */
 @Entry
 @Component
@@ -33,22 +33,17 @@ struct MainPage {
       .tabBar(this.tabBar('首页', '🏠'))
 
       TabContent() {
-        HealthTab({ active: this.currentIndex === 1 })
+        FoodRecognizeTab()
+      }
+      .tabBar(this.tabBar('识食', '📷'))
+
+      TabContent() {
+        HealthTab({ active: this.currentIndex === 2 })
       }
       .tabBar(this.tabBar('健康', '🫀'))
 
       TabContent() {
-        FavoriteTab({ active: this.currentIndex === 2 })
-      }
-      .tabBar(this.tabBar('收藏', '❤️'))
-
-      TabContent() {
-        HistoryTab({ active: this.currentIndex === 3 })
-      }
-      .tabBar(this.tabBar('历史', '🕒'))
-
-      TabContent() {
-        ProfileTab({ active: this.currentIndex === 4 })
+        ProfileTab({ active: this.currentIndex === 3 })
       }
       .tabBar(this.tabBar('我的', '👤'))
     }

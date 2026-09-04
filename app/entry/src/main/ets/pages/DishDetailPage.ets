@@ -2,6 +2,7 @@ import { router, promptAction } from '@kit.ArkUI';
 import { BizApi } from '../service/BizApi';
 import { DishVo } from '../model/ApiModels';
 import { COLOR_PRIMARY } from '../common/Constants';
+import { AuthGuard } from '../common/AuthGuard';
 
 /**
  * 菜品详情页
@@ -37,6 +38,9 @@ struct DishDetailPage {
   }
 
   toggleFavorite(): void {
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
     if (this.favorite) {
       BizApi.removeFavorite(this.dish.id).then((res) => {
         if (res.code === 200) {

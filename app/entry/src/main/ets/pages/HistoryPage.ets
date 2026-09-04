@@ -1,14 +1,15 @@
-import { BizApi } from '../../service/BizApi';
-import { BrowseHistoryVo } from '../../model/ApiModels';
-import { DishCard } from '../../components/DishCard';
-import { EmptyView } from '../../components/EmptyView';
+import { router } from '@kit.ArkUI';
+import { BizApi } from '../service/BizApi';
+import { BrowseHistoryVo } from '../model/ApiModels';
+import { DishCard } from '../components/DishCard';
+import { EmptyView } from '../components/EmptyView';
 
 /**
- * 浏览历史 Tab
+ * 浏览历史页（从「我的」进入）
  */
+@Entry
 @Component
-export struct HistoryTab {
-  @Prop @Watch('onActiveChange') active: boolean = false;
+struct HistoryPage {
   @State list: BrowseHistoryVo[] = [];
   @State loading: boolean = false;
   @State finished: boolean = false;
@@ -17,12 +18,6 @@ export struct HistoryTab {
 
   aboutToAppear(): void {
     this.refresh();
-  }
-
-  onActiveChange(): void {
-    if (this.active) {
-      this.refresh();
-    }
   }
 
   refresh(): void {
@@ -56,13 +51,21 @@ export struct HistoryTab {
   build() {
     Column() {
       Row() {
+        Text('‹')
+          .fontSize(28)
+          .fontColor('#1A1A1A')
+          .width(40)
+          .onClick(() => {
+            router.back();
+          })
         Text('浏览历史')
-          .fontSize(20)
+          .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor('#1A1A1A')
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 14, bottom: 12 })
+      .height(50)
+      .padding({ left: 10, right: 16 })
 
       if (this.loading && this.list.length === 0) {
         Column() {

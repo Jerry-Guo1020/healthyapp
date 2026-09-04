@@ -1,4 +1,4 @@
-import { router, promptAction } from '@kit.ArkUI';
+import { promptAction } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { FoodApi } from '../service/FoodApi';
@@ -6,14 +6,13 @@ import { ImageUtil } from '../common/ImageUtil';
 import { FoodRecognizeVo, DishVo } from '../model/ApiModels';
 import { DishCard } from '../components/DishCard';
 
-const TAG: string = 'FoodRecognizePage';
+const TAG: string = 'FoodRecognizeTab';
 
 /**
- * 食物拍照识别页：选图 → 压缩转 base64 → 后端识别 → 匹配菜品 + 推荐
+ * 拍照识食 Tab（底部导航主功能）：选图 → 压缩转 base64 → 后端识别 → 匹配菜品 + 推荐
  */
-@Entry
 @Component
-struct FoodRecognizePage {
+export struct FoodRecognizeTab {
   @State imageUri: string = '';
   @State imageBase64: string = '';
   @State recognizing: boolean = false;
@@ -49,31 +48,6 @@ struct FoodRecognizePage {
     } finally {
       this.recognizing = false;
     }
-  }
-
-  goBack(): void {
-    router.back();
-  }
-
-  @Builder
-  navBar() {
-    Row() {
-      Text('‹')
-        .fontSize(30)
-        .fontColor('#1A1A1A')
-        .width(40)
-        .onClick(() => {
-          this.goBack();
-        })
-      Text('拍照识食')
-        .fontSize(18)
-        .fontWeight(FontWeight.Bold)
-        .fontColor('#1A1A1A')
-      Blank()
-    }
-    .width('100%')
-    .height(50)
-    .padding({ left: 10, right: 16 })
   }
 
   @Builder
@@ -200,7 +174,15 @@ struct FoodRecognizePage {
 
   build() {
     Column() {
-      this.navBar()
+      Row() {
+        Text('拍照识食')
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#1A1A1A')
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 14, bottom: 8 })
+
       Scroll() {
         Column() {
           this.imageArea()
@@ -209,6 +191,7 @@ struct FoodRecognizePage {
           }
         }
         .width('100%')
+        .padding({ bottom: 20 })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Off)

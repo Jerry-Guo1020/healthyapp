@@ -4,7 +4,11 @@
     "pages/LoginPage",
     "pages/MainPage",
     "pages/DishDetailPage",
-    "pages/FoodRecognizePage",
-    "pages/AgreementPage"
+    "pages/AgreementPage",
+    "pages/FavoritePage",
+    "pages/HistoryPage",
+    "pages/SearchPage",
+    "pages/AboutPage",
+    "pages/AccountManagePage"
   ]
 }

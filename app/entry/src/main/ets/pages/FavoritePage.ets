@@ -1,14 +1,15 @@
-import { BizApi } from '../../service/BizApi';
-import { DishVo } from '../../model/ApiModels';
-import { DishCard } from '../../components/DishCard';
-import { EmptyView } from '../../components/EmptyView';
+import { router } from '@kit.ArkUI';
+import { BizApi } from '../service/BizApi';
+import { DishVo } from '../model/ApiModels';
+import { DishCard } from '../components/DishCard';
+import { EmptyView } from '../components/EmptyView';
 
 /**
- * 收藏 Tab
+ * 我的收藏页（从「我的」进入）
  */
+@Entry
 @Component
-export struct FavoriteTab {
-  @Prop @Watch('onActiveChange') active: boolean = false;
+struct FavoritePage {
   @State dishes: DishVo[] = [];
   @State loading: boolean = false;
   @State finished: boolean = false;
@@ -17,12 +18,6 @@ export struct FavoriteTab {
 
   aboutToAppear(): void {
     this.refresh();
-  }
-
-  onActiveChange(): void {
-    if (this.active) {
-      this.refresh();
-    }
   }
 
   refresh(): void {
@@ -56,13 +51,21 @@ export struct FavoriteTab {
   build() {
     Column() {
       Row() {
+        Text('‹')
+          .fontSize(28)
+          .fontColor('#1A1A1A')
+          .width(40)
+          .onClick(() => {
+            router.back();
+          })
         Text('我的收藏')
-          .fontSize(20)
+          .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor('#1A1A1A')
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 14, bottom: 12 })
+      .height(50)
+      .padding({ left: 10, right: 16 })
 
       if (this.loading && this.dishes.length === 0) {
         Column() {

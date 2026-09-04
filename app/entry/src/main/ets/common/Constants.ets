@@ -13,6 +13,7 @@ export const APP_API_PREFIX: string = '/app/v1';
 // 本地持久化 Key
 export const STORAGE_KEY_TOKEN: string = 'shanheng_token';
 export const STORAGE_KEY_USER: string = 'shanheng_user';
+export const STORAGE_KEY_HEALTH_AUTH: string = 'shanheng_health_auth';
 
 // 主题色
 export const COLOR_PRIMARY: string = '#00A86B';

@@ -12,7 +12,6 @@ export struct HomeTab {
   @State categories: CategoryVo[] = [];
   @State dishes: DishVo[] = [];
   @State selectedCategoryId: string = '';
-  @State keyword: string = '';
   @State loading: boolean = false;
   @State finished: boolean = false;
   private pageNum: number = 1;
@@ -39,7 +38,7 @@ export struct HomeTab {
     q.pageNum = this.pageNum;
     q.pageSize = this.pageSize;
     q.categoryId = this.selectedCategoryId;
-    q.keyword = this.keyword;
+    q.keyword = '';
     BizApi.pageDishes(q).then((res) => {
       this.loading = false;
       if (res.code === 200 && res.data != null) {
@@ -59,7 +58,7 @@ export struct HomeTab {
     q.pageNum = this.pageNum;
     q.pageSize = this.pageSize;
     q.categoryId = this.selectedCategoryId;
-    q.keyword = this.keyword;
+    q.keyword = '';
     BizApi.pageDishes(q).then((res) => {
       this.loading = false;
       if (res.code === 200 && res.data != null) {
@@ -74,10 +73,6 @@ export struct HomeTab {
       return;
     }
     this.selectedCategoryId = id;
-    this.refreshDishes();
-  }
-
-  onSearch(): void {
     this.refreshDishes();
   }
 
@@ -111,20 +106,14 @@ export struct HomeTab {
       Row() {
         Text('🔍')
           .fontSize(15)
-        TextInput({ placeholder: '搜索菜品名称', text: this.keyword })
-          .layoutWeight(1)
-          .height(40)
+        Text('搜索菜品名称')
           .fontSize(14)
-          .backgroundColor('#00000000')
-          .onChange((value: string) => {
-            this.keyword = value;
-          })
+          .fontColor('#999999')
+          .layoutWeight(1)
+          .margin({ left: 8 })
         Text('搜索')
           .fontSize(13)
           .fontColor('#00A86B')
-          .onClick(() => {
-            this.onSearch();
-          })
       }
       .width('92%')
       .height(42)
@@ -132,28 +121,8 @@ export struct HomeTab {
       .backgroundColor('#EBEDEF')
       .borderRadius(21)
       .margin({ bottom: 10 })
-
-      Row() {
-        Text('📷')
-          .fontSize(18)
-        Text('拍照识食')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor('#FFFFFF')
-          .margin({ left: 8 })
-        Blank()
-        Text('拍下食物，智能识别并推荐 ›')
-          .fontSize(12)
-          .fontColor('#DFF5E9')
-      }
-      .width('92%')
-      .height(44)
-      .padding({ left: 14, right: 14 })
-      .backgroundColor('#00A86B')
-      .borderRadius(12)
-      .margin({ bottom: 10 })
       .onClick(() => {
-        router.pushUrl({ url: 'pages/FoodRecognizePage' });
+        router.pushUrl({ url: 'pages/SearchPage' });
       })
 
       Scroll() {
