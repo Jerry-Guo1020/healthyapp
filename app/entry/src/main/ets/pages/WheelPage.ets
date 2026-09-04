@@ -1,4 +1,4 @@
-import { router } from '@kit.ArkUI';
+import { router, promptAction } from '@kit.ArkUI';
 import { BizApi } from '../service/BizApi';
 import { DishVo } from '../model/ApiModels';
 import { COLOR_PRIMARY } from '../common/Constants';
@@ -71,17 +71,17 @@ struct WheelPage {
       // 菜品名（沿径向从中心向外）
       const mid = start + sector / 2;
       let name = this.candidates[i].name;
-      if (name.length > 5) {
-        name = name.substring(0, 5);
+      if (name.length > 4) {
+        name = name.substring(0, 4);
       }
       this.ctx.save();
       this.ctx.translate(c, c);
       this.ctx.rotate(mid);
       this.ctx.fillStyle = '#FFFFFF';
-      this.ctx.font = 'bold 13px sans-serif';
+      this.ctx.font = 'bold 18px sans-serif';
       this.ctx.textAlign = 'left';
       this.ctx.textBaseline = 'middle';
-      this.ctx.fillText(name, r * 0.55, 0);
+      this.ctx.fillText(name, r * 0.52, 0);
       this.ctx.restore();
     }
     // 中心圆点
@@ -123,6 +123,18 @@ struct WheelPage {
   again(): void {
     this.drawWheel();
     this.spin();
+  }
+
+  /** 换一批：弹窗提示 + 转盘过渡动画 */
+  refreshBatch(): void {
+    if (this.loading) {
+      return;
+    }
+    promptAction.showToast({ message: '正在换一批菜品…' });
+    animateTo({ duration: 380, curve: Curve.EaseInOut }, () => {
+      this.wheelRotate = this.wheelRotate + 180;
+    });
+    this.loadRandom();
   }
 
   goDetail(): void {
@@ -183,7 +195,7 @@ struct WheelPage {
             .fontColor(COLOR_PRIMARY)
             .backgroundColor('#00A86B14')
             .onClick(() => {
-              this.loadRandom();
+              this.refreshBatch();
             })
           Button('去查看')
             .layoutWeight(1)
@@ -283,7 +295,7 @@ struct WheelPage {
             }
             .margin({ top: 18 })
             .onClick(() => {
-              this.loadRandom();
+              this.refreshBatch();
             })
           }
         }

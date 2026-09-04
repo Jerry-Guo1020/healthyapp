@@ -105,6 +105,9 @@ export struct ProfileTab {
   }
 
   savePreference(): void {
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
     if (this.savingPref) {
       return;
     }
@@ -125,6 +128,9 @@ export struct ProfileTab {
   }
 
   addAvoid(item: string): void {
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
     const name = item.trim();
     if (name === '') {
       promptAction.showToast({ message: '请输入忌口项' });
@@ -147,6 +153,9 @@ export struct ProfileTab {
   }
 
   removeAvoid(id: string): void {
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
     UserApi.removeAvoid(id).then((res) => {
       if (res.code === 200) {
         this.loadAvoid();
@@ -486,6 +495,9 @@ export struct ProfileTab {
           .fontSize(13)
           .fontColor('#00A86B')
           .onClick(() => {
+            if (!AuthGuard.requireAccount()) {
+              return;
+            }
             this.prefExpanded = !this.prefExpanded;
           })
       }
@@ -760,6 +772,7 @@ export struct ProfileTab {
           this.aboutCard()
         }
         .width('100%')
+        .padding({ bottom: 60 })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Off)

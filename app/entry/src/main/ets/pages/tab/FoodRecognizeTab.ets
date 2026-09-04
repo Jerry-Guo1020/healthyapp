@@ -51,6 +51,60 @@ export struct FoodRecognizeTab {
   }
 
   @Builder
+  stepItem(icon: string, label: string) {
+    Column() {
+      Text(icon)
+        .fontSize(22)
+      Text(label)
+        .fontSize(11)
+        .fontColor('#555555')
+        .margin({ top: 6 })
+    }
+    .layoutWeight(1)
+  }
+
+  @Builder
+  introCard() {
+    Column() {
+      Text('怎么使用')
+        .fontSize(14)
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#1A1A1A')
+        .width('100%')
+      Row() {
+        this.stepItem('📷', '拍照 / 选图')
+        Text('›')
+          .fontSize(18)
+          .fontColor('#BBBBBB')
+        this.stepItem('🔍', '自动识别')
+        Text('›')
+          .fontSize(18)
+          .fontColor('#BBBBBB')
+        this.stepItem('🥗', '匹配推荐')
+      }
+      .width('100%')
+      .margin({ top: 14 })
+      Text('拍下食物照片，自动识别菜品名称与热量，并匹配膳衡菜品，给出更健康的选择。')
+        .fontSize(12)
+        .fontColor('#999999')
+        .lineHeight(18)
+        .width('100%')
+        .margin({ top: 12 })
+      Text('• 支持常见中式菜品、主食、水果等\n• 照片仅用于本次识别，不会长期存储')
+        .fontSize(11)
+        .fontColor('#BBBBBB')
+        .lineHeight(18)
+        .width('100%')
+        .margin({ top: 10 })
+    }
+    .width('92%')
+    .padding(16)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(14)
+    .margin({ top: 8 })
+  }
+
+  @Builder
   imageArea() {
     Column() {
       if (this.imageUri !== '') {
@@ -185,6 +239,7 @@ export struct FoodRecognizeTab {
 
       Scroll() {
         Column() {
+          this.introCard()
           this.imageArea()
           if (this.result != null) {
             this.resultArea(this.result)

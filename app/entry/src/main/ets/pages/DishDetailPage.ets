@@ -261,13 +261,8 @@ struct DishDetailPage {
 
       // 底部操作栏
       Row() {
-        Text(this.priceText())
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#E5484D')
-          .layoutWeight(1)
         Button(this.favorite ? '❤ 已收藏' : '🤍 收藏')
-          .width(140)
+          .width('100%')
           .height(46)
           .fontSize(15)
           .fontColor('#FFFFFF')
@@ -297,13 +292,6 @@ struct DishDetailPage {
       return '适中';
     }
     return '偏多';
-  }
-
-  private priceText(): string {
-    if (this.dish.priceMin <= 0 && this.dish.priceMax <= 0) {
-      return '';
-    }
-    return `¥${this.dish.priceMin}-${this.dish.priceMax}`;
   }
 
   @Builder

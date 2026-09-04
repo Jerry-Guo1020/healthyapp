@@ -18,6 +18,7 @@ struct SearchPage {
   @State searched: boolean = false;
   private pageNum: number = 1;
   private pageSize: number = 10;
+  private searchCtrl: TextInputController = new TextInputController();
 
   doSearch(): void {
     if (this.keyword.trim() === '') {
@@ -85,6 +86,7 @@ struct SearchPage {
             .height(40)
             .fontSize(14)
             .backgroundColor('#00000000')
+            .controller(this.searchCtrl)
             .onChange((value: string) => {
               this.keyword = value;
             })
@@ -106,6 +108,7 @@ struct SearchPage {
             .borderRadius(18)
             .margin({ left: 8 })
             .onClick(() => {
+              this.searchCtrl.stopEditing();
               this.doSearch();
             })
         }

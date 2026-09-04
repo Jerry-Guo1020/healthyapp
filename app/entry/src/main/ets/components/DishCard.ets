@@ -14,13 +14,6 @@ class DishDetailParams {
 export struct DishCard {
   @Prop dish: DishVo = new DishVo();
 
-  private priceText(): string {
-    if (this.dish.priceMin <= 0 && this.dish.priceMax <= 0) {
-      return '时价';
-    }
-    return `¥${this.dish.priceMin}-${this.dish.priceMax}`;
-  }
-
   private openDetail(): void {
     const p = new DishDetailParams();
     p.dishId = this.dish.id;
@@ -87,10 +80,6 @@ export struct DishCard {
           Text(`${this.dish.calorie} 千卡`)
             .fontSize(12)
             .fontColor('#F5A623')
-          Text(this.priceText())
-            .fontSize(12)
-            .fontColor('#1A1A1A')
-            .margin({ left: 10 })
           Blank()
           Text(`❤ ${this.dish.favoriteCount}`)
             .fontSize(12)
