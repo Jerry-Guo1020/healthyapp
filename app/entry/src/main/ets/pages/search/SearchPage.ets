@@ -1,8 +1,8 @@
 import { router, promptAction } from '@kit.ArkUI';
-import { BizApi, DishQuery } from '../service/BizApi';
-import { DishVo } from '../model/ApiModels';
-import { DishCard } from '../components/DishCard';
-import { EmptyView } from '../components/EmptyView';
+import { BizApi, DishQuery } from '../../service/BizApi';
+import { DishVo } from '../../model/ApiModels';
+import { DishCard } from '../../components/DishCard';
+import { EmptyView } from '../../components/EmptyView';
 
 /**
  * 搜索页：独立搜索界面，支持关键词搜索 + 一键清除 + 结果分页展示。

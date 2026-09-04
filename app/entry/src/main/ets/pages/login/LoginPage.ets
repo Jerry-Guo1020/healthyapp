@@ -1,11 +1,11 @@
 import { router, promptAction } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { AuthApi } from '../service/AuthApi';
-import { UserSession } from '../common/UserSession';
-import { DeviceUtil } from '../common/DeviceUtil';
-import { Logger } from '../common/Logger';
-import { HuaweiAuthService, HuaweiAuthCode } from '../service/HuaweiAuthService';
+import { AuthApi } from '../../service/AuthApi';
+import { UserSession } from '../../common/UserSession';
+import { DeviceUtil } from '../../common/DeviceUtil';
+import { Logger } from '../../common/Logger';
+import { HuaweiAuthService, HuaweiAuthCode } from '../../service/HuaweiAuthService';
 
 const TAG: string = 'LoginPage';
 
@@ -40,7 +40,7 @@ struct LoginPage {
     const p = new AgreementParams();
     p.type = type;
     router.pushUrl({
-      url: 'pages/AgreementPage',
+      url: 'pages/agreement/AgreementPage',
       params: p
     });
   }
@@ -50,7 +50,7 @@ struct LoginPage {
   }
 
   private goMain(): void {
-    router.replaceUrl({ url: 'pages/MainPage' });
+    router.replaceUrl({ url: 'pages/main/MainPage' });
   }
 
   /** 华为账号一键登录（获取手机号，需企业权限，审核中则降级） */

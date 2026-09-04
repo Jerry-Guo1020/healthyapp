@@ -1,8 +1,8 @@
 import { router, promptAction } from '@kit.ArkUI';
-import { BizApi } from '../service/BizApi';
-import { DishVo } from '../model/ApiModels';
-import { COLOR_PRIMARY } from '../common/Constants';
-import { AuthGuard } from '../common/AuthGuard';
+import { BizApi } from '../../service/BizApi';
+import { DishVo } from '../../model/ApiModels';
+import { COLOR_PRIMARY } from '../../common/Constants';
+import { AuthGuard } from '../../common/AuthGuard';
 
 /**
  * 菜品详情页

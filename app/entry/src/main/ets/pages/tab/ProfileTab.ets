@@ -25,6 +25,7 @@ export struct ProfileTab {
   @Prop @Watch('onActiveChange') active: boolean = false;
   @State nickname: string = '未登录';
   @State isGuest: number = 1;
+  @State loggedIn: boolean = false;
 
   // 饮食偏好
   @State healthGoal: string = '';
@@ -67,7 +68,8 @@ export struct ProfileTab {
 
   refreshUser(): void {
     const u = UserSession.userInfo;
-    if (u != null) {
+    this.loggedIn = UserSession.isLoggedInUser();
+    if (this.loggedIn && u != null) {
       this.nickname = u.nickname;
       this.isGuest = u.isGuest;
     } else {
@@ -242,28 +244,35 @@ export struct ProfileTab {
     if (!AuthGuard.requireAccount()) {
       return;
     }
-    router.pushUrl({ url: 'pages/FavoritePage' });
+    router.pushUrl({ url: 'pages/favorite/FavoritePage' });
   }
 
   enterHistory(): void {
     if (!AuthGuard.requireAccount()) {
       return;
     }
-    router.pushUrl({ url: 'pages/HistoryPage' });
+    router.pushUrl({ url: 'pages/history/HistoryPage' });
   }
 
   enterAccount(): void {
-    router.pushUrl({ url: 'pages/AccountManagePage' });
+    if (!AuthGuard.requireAccount()) {
+      return;
+    }
+    router.pushUrl({ url: 'pages/account/AccountManagePage' });
+  }
+
+  goLogin(): void {
+    router.pushUrl({ url: 'pages/login/LoginPage' });
   }
 
   enterAbout(): void {
-    router.pushUrl({ url: 'pages/AboutPage' });
+    router.pushUrl({ url: 'pages/about/AboutPage' });
   }
 
   onLogout(): void {
     UserSession.logout();
     promptAction.showToast({ message: '已退出登录' });
-    router.replaceUrl({ url: 'pages/LoginPage' });
+    router.replaceUrl({ url: 'pages/login/LoginPage' });
   }
 
   selectGoal(code: string): void {
@@ -387,31 +396,55 @@ export struct ProfileTab {
   @Builder
   userCard() {
     Row() {
-      Text('👤')
+      Text(this.loggedIn ? '👤' : '🔒')
         .width(60)
         .height(60)
-        .fontSize(30)
+        .fontSize(this.loggedIn ? 30 : 26)
         .textAlign(TextAlign.Center)
         .backgroundColor('#00A86B1A')
         .borderRadius(30)
-      Column() {
-        Text(this.nickname)
-          .fontSize(18)
-          .fontWeight(FontWeight.Medium)
-          .fontColor('#1A1A1A')
-        Text(this.isGuest === 1 ? '游客模式（登录后可同步数据）' : '已登录用户')
-          .fontSize(12)
-          .fontColor('#999999')
-          .margin({ top: 4 })
+      if (this.loggedIn) {
+        Column() {
+          Text(this.nickname)
+            .fontSize(18)
+            .fontWeight(FontWeight.Medium)
+            .fontColor('#1A1A1A')
+          Text('已登录用户')
+            .fontSize(12)
+            .fontColor('#999999')
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .margin({ left: 14 })
+      } else {
+        Column() {
+          Text('未登录，请登录')
+            .fontSize(18)
+            .fontWeight(FontWeight.Medium)
+            .fontColor('#1A1A1A')
+          Text('登录后同步健康数据、收藏与偏好')
+            .fontSize(12)
+            .fontColor('#999999')
+            .margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .margin({ left: 14 })
+        .layoutWeight(1)
+        Text('›')
+          .fontSize(20)
+          .fontColor('#BBBBBB')
       }
-      .alignItems(HorizontalAlign.Start)
-      .margin({ left: 14 })
     }
     .width('92%')
     .padding(18)
     .backgroundColor('#FFFFFF')
     .borderRadius(14)
     .margin({ top: 6 })
+    .onClick(() => {
+      if (!this.loggedIn) {
+        this.goLogin();
+      }
+    })
   }
 
   @Builder

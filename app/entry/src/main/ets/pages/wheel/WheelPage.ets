@@ -1,7 +1,7 @@
 import { router, promptAction } from '@kit.ArkUI';
-import { BizApi } from '../service/BizApi';
-import { DishVo } from '../model/ApiModels';
-import { COLOR_PRIMARY } from '../common/Constants';
+import { BizApi } from '../../service/BizApi';
+import { DishVo } from '../../model/ApiModels';
+import { COLOR_PRIMARY } from '../../common/Constants';
 
 // 详情页路由参数（ArkTS 禁止无类型对象字面量）
 class WheelDetailParams {
@@ -146,7 +146,7 @@ struct WheelPage {
     p.dishId = d.id;
     p.name = d.name;
     router.pushUrl({
-      url: 'pages/DishDetailPage',
+      url: 'pages/dish/DishDetailPage',
       params: p
     });
   }

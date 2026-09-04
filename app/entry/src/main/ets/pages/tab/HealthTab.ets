@@ -171,7 +171,7 @@ export struct HealthTab {
     p.dishId = dish.id;
     p.name = dish.name;
     router.pushUrl({
-      url: 'pages/DishDetailPage',
+      url: 'pages/dish/DishDetailPage',
       params: p
     });
   }
@@ -303,7 +303,7 @@ export struct HealthTab {
         .borderRadius(22)
         .margin({ top: 20 })
         .onClick(() => {
-          router.pushUrl({ url: 'pages/LoginPage' });
+          router.pushUrl({ url: 'pages/login/LoginPage' });
         })
     }
     .width('92%')

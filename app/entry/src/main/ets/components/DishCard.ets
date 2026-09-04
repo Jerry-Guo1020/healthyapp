@@ -19,7 +19,7 @@ export struct DishCard {
     p.dishId = this.dish.id;
     p.name = this.dish.name;
     router.pushUrl({
-      url: 'pages/DishDetailPage',
+      url: 'pages/dish/DishDetailPage',
       params: p
     });
   }

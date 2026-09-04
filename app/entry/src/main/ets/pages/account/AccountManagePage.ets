@@ -1,5 +1,5 @@
 import { router, promptAction } from '@kit.ArkUI';
-import { UserSession } from '../common/UserSession';
+import { UserSession } from '../../common/UserSession';
 
 /**
  * 用户管理页：查看当前账号信息、登录方式，支持退出登录 / 前往登录。
@@ -10,7 +10,7 @@ struct AccountManagePage {
   @State nickname: string = '未登录';
   @State isGuest: number = 1;
   @State userId: string = '';
-  @State loginWay: string = '游客模式';
+  @State loginWay: string = '未登录';
 
   aboutToAppear(): void {
     const u = UserSession.userInfo;
@@ -18,12 +18,12 @@ struct AccountManagePage {
       this.nickname = u.nickname;
       this.isGuest = u.isGuest;
       this.userId = u.id;
-      this.loginWay = this.isGuest === 1 ? '游客模式（设备登录）' : '华为账号';
+      this.loginWay = this.isGuest === 1 ? '未登录' : '华为账号';
     }
   }
 
   goLogin(): void {
-    router.pushUrl({ url: 'pages/LoginPage' });
+    router.pushUrl({ url: 'pages/login/LoginPage' });
   }
 
   logout(): void {
@@ -35,7 +35,7 @@ struct AccountManagePage {
         action: () => {
           UserSession.logout();
           promptAction.showToast({ message: '已退出登录' });
-          router.replaceUrl({ url: 'pages/LoginPage' });
+          router.replaceUrl({ url: 'pages/login/LoginPage' });
         }
       },
       secondaryButton: {
@@ -107,7 +107,7 @@ struct AccountManagePage {
                 .fontSize(15)
                 .fontColor('#1A1A1A')
               Blank()
-              Text(this.isGuest === 1 ? '游客' : '正式用户')
+              Text(this.isGuest === 1 ? '未登录' : '正式用户')
                 .fontSize(13)
                 .fontColor(this.isGuest === 1 ? '#F5A623' : '#00A86B')
             }
@@ -133,7 +133,7 @@ struct AccountManagePage {
 
           if (this.isGuest === 1) {
             Column() {
-              Text('当前为游客模式，收藏、历史、健康分析、偏好等数据将在登录账号后云端同步保存。')
+              Text('当前未登录，收藏、历史、健康分析、偏好等数据将在登录账号后云端同步保存。')
                 .fontSize(13)
                 .fontColor('#999999')
                 .lineHeight(20)

@@ -122,7 +122,7 @@ export struct HomeTab {
       .borderRadius(21)
       .margin({ bottom: 10 })
       .onClick(() => {
-        router.pushUrl({ url: 'pages/SearchPage' });
+        router.pushUrl({ url: 'pages/search/SearchPage' });
       })
 
       Row() {
@@ -145,7 +145,7 @@ export struct HomeTab {
       .borderRadius(12)
       .margin({ bottom: 10 })
       .onClick(() => {
-        router.pushUrl({ url: 'pages/WheelPage' });
+        router.pushUrl({ url: 'pages/wheel/WheelPage' });
       })
 
       Scroll() {

@@ -1,9 +1,9 @@
 import { router } from '@kit.ArkUI';
-import { UserSession } from '../common/UserSession';
-import { HealthAuthState } from '../common/HealthAuthState';
-import { DeviceUtil } from '../common/DeviceUtil';
-import { AuthApi } from '../service/AuthApi';
-import { Logger } from '../common/Logger';
+import { UserSession } from '../../common/UserSession';
+import { HealthAuthState } from '../../common/HealthAuthState';
+import { DeviceUtil } from '../../common/DeviceUtil';
+import { AuthApi } from '../../service/AuthApi';
+import { Logger } from '../../common/Logger';
 
 const TAG: string = 'Index';
 
@@ -20,7 +20,7 @@ struct Index {
     HealthAuthState.init();
     setTimeout(() => {
       if (UserSession.isLogin()) {
-        router.replaceUrl({ url: 'pages/MainPage' });
+        router.replaceUrl({ url: 'pages/main/MainPage' });
         return;
       }
       // 静默游客登录，保证首页等展示类功能可用
@@ -28,10 +28,10 @@ struct Index {
         if (res.code === 200 && res.data != null) {
           UserSession.saveLogin(res.data);
         }
-        router.replaceUrl({ url: 'pages/MainPage' });
+        router.replaceUrl({ url: 'pages/main/MainPage' });
       }).catch((err: Error) => {
         Logger.warn(TAG, `guest login fail: ${err.message}`);
-        router.replaceUrl({ url: 'pages/MainPage' });
+        router.replaceUrl({ url: 'pages/main/MainPage' });
       });
     }, 600);
   }

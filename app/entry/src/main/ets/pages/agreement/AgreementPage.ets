@@ -1,6 +1,6 @@
 import { router } from '@kit.ArkUI';
 import { webview } from '@kit.ArkWeb';
-import { AgreementText } from '../common/AgreementText';
+import { AgreementText } from '../../common/AgreementText';
 
 /**
  * 协议展示页。

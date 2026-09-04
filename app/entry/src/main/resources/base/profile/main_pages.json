@@ -1,15 +1,15 @@
 {
   "src": [
-    "pages/Index",
-    "pages/LoginPage",
-    "pages/MainPage",
-    "pages/DishDetailPage",
-    "pages/AgreementPage",
-    "pages/FavoritePage",
-    "pages/HistoryPage",
-    "pages/SearchPage",
-    "pages/WheelPage",
-    "pages/AboutPage",
-    "pages/AccountManagePage"
+    "pages/index/Index",
+    "pages/login/LoginPage",
+    "pages/main/MainPage",
+    "pages/dish/DishDetailPage",
+    "pages/agreement/AgreementPage",
+    "pages/favorite/FavoritePage",
+    "pages/history/HistoryPage",
+    "pages/search/SearchPage",
+    "pages/wheel/WheelPage",
+    "pages/about/AboutPage",
+    "pages/account/AccountManagePage"
   ]
 }

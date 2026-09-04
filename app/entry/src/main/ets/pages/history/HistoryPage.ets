@@ -1,8 +1,8 @@
 import { router } from '@kit.ArkUI';
-import { BizApi } from '../service/BizApi';
-import { BrowseHistoryVo } from '../model/ApiModels';
-import { DishCard } from '../components/DishCard';
-import { EmptyView } from '../components/EmptyView';
+import { BizApi } from '../../service/BizApi';
+import { BrowseHistoryVo } from '../../model/ApiModels';
+import { DishCard } from '../../components/DishCard';
+import { EmptyView } from '../../components/EmptyView';
 
 /**
  * 浏览历史页（从「我的」进入）

@@ -11,7 +11,7 @@ export class AuthGuard {
       return true;
     }
     promptAction.showToast({ message: '请先登录后使用该功能' });
-    router.pushUrl({ url: 'pages/LoginPage' });
+    router.pushUrl({ url: 'pages/login/LoginPage' });
     return false;
   }
 }

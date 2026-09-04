@@ -1,7 +1,7 @@
-import { HomeTab } from './tab/HomeTab';
-import { FoodRecognizeTab } from './tab/FoodRecognizeTab';
-import { HealthTab } from './tab/HealthTab';
-import { ProfileTab } from './tab/ProfileTab';
+import { HomeTab } from '../tab/HomeTab';
+import { FoodRecognizeTab } from '../tab/FoodRecognizeTab';
+import { HealthTab } from '../tab/HealthTab';
+import { ProfileTab } from '../tab/ProfileTab';
 
 /**
  * 主框架：底部四 Tab（首页 / 识食 / 健康 / 我的）

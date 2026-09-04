@@ -38,6 +38,11 @@ export class UserSession {
     return UserSession.userInfo.isGuest === 1;
   }
 
+  /** 是否为正式登录账号（非游客、非未登录） */
+  static isLoggedInUser(): boolean {
+    return UserSession.isLogin() && !UserSession.isGuest();
+  }
+
   static saveLogin(vo: AppLoginVo): void {
     UserSession.token = vo.token;
     UserSession.userInfo = vo.userInfo;

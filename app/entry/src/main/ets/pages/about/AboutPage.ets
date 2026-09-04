@@ -15,7 +15,7 @@ struct AboutPage {
     const p = new AgreementParams();
     p.type = type;
     router.pushUrl({
-      url: 'pages/AgreementPage',
+      url: 'pages/agreement/AgreementPage',
       params: p
     });
   }
