@@ -86,6 +86,27 @@ struct LoginPage {
     });
   }
 
+  /** 构造一键登录按钮参数（显式声明尺寸，保险避免官方组件默认大尺寸渲染） */
+  private buildQuickLoginParams(): loginComponentManager.LoginWithHuaweiIDButtonParams {
+    const btnSize: loginComponentManager.ButtonSize = {
+      width: '100%',
+      height: 52
+    };
+    const btnStyle: loginComponentManager.ButtonStyle =
+      new loginComponentManager.ButtonStyle().buttonSize(btnSize);
+    const extraStyle: loginComponentManager.ExtraStyle = {
+      buttonStyle: btnStyle
+    };
+    const params: loginComponentManager.LoginWithHuaweiIDButtonParams = {
+      style: loginComponentManager.Style.BUTTON_RED,
+      loginType: loginComponentManager.LoginType.QUICK_LOGIN,
+      borderRadius: 26,
+      supportDarkMode: true,
+      extraStyle: extraStyle
+    };
+    return params;
+  }
+
   /** 华为账号一键登录：组件回调返回 unionId/openId，直传后端登录 */
   private handleQuickLogin(error: BusinessError | undefined,
     credential: loginComponentManager.HuaweiIDCredential): void {
@@ -216,17 +237,11 @@ struct LoginPage {
           .margin({ bottom: 16 })
         }
 
-        // 一键登录（华为官方组件，LoginType.QUICK_LOGIN）
+        // 一键登录（华为官方组件，尺寸经 extraStyle.buttonSize 控制，避免默认尺寸过大）
         LoginWithHuaweiIDButton({
-          params: {
-            style: loginComponentManager.Style.BUTTON_RED,
-            loginType: loginComponentManager.LoginType.QUICK_LOGIN,
-            borderRadius: 26,
-            supportDarkMode: true
-          },
+          params: this.buildQuickLoginParams(),
           controller: this.quickController
         })
-          .width('100%')
 
         Text('点击上方按钮，将通过华为账号授权一键登录')
           .fontSize(11)
