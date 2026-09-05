@@ -6,6 +6,7 @@ import { UserSession } from '../../common/UserSession';
 import { DeviceUtil } from '../../common/DeviceUtil';
 import { Logger } from '../../common/Logger';
 import { HuaweiAuthService, HuaweiAuthCode } from '../../service/HuaweiAuthService';
+import { loginComponentManager, LoginWithHuaweiIDButton } from '@kit.AccountKit';
 
 const TAG: string = 'LoginPage';
 
@@ -26,6 +27,10 @@ struct LoginPage {
   @State huaweiLoading: boolean = false;
   @State guestLoading: boolean = false;
   @State agreed: boolean = false;
+
+  /** 一键登录按钮 controller（协议状态 + 点击回调），回调在 aboutToAppear 里绑定 */
+  private quickController: loginComponentManager.LoginWithHuaweiIDButtonController =
+    new loginComponentManager.LoginWithHuaweiIDButtonController();
 
   /** 所有登录操作前置校验：必须勾选协议 */
   private checkAgreed(): boolean {
@@ -53,34 +58,60 @@ struct LoginPage {
     router.replaceUrl({ url: 'pages/main/MainPage' });
   }
 
-  /** 华为账号一键登录（获取手机号，需企业权限，审核中则降级） */
-  onQuickLogin(): void {
-    if (!this.checkAgreed()) {
+  /** 组件挂载：绑定一键登录按钮的协议状态与点击回调 */
+  aboutToAppear(): void {
+    this.quickController
+      .setAgreementStatus(loginComponentManager.AgreementStatus.NOT_ACCEPTED)
+      .onClickLoginWithHuaweiIDButton((error: BusinessError | undefined,
+        credential: loginComponentManager.HuaweiIDCredential): void => {
+        this.handleQuickLogin(error, credential);
+      });
+  }
+
+  /** 华为账号一键登录：组件回调返回 unionId/openId，直传后端登录 */
+  private handleQuickLogin(error: BusinessError | undefined,
+    credential: loginComponentManager.HuaweiIDCredential): void {
+    if (error) {
+      this.quickLoading = false;
+      Logger.error(TAG, `quick login error: ${error.code} ${error.message}`);
+      if (error.code === 1005300001) {
+        promptAction.showToast({ message: '请先阅读并同意相关协议' });
+      } else if (error.code === 1001502012) {
+        // 用户取消授权，无需提示
+      } else if (error.code === 1001502014) {
+        promptAction.showToast({ message: '一键登录权限未开通，请使用华为账号登录' });
+      } else {
+        promptAction.showToast({ message: '一键登录失败，请稍后重试或使用华为账号登录' });
+      }
+      return;
+    }
+    const unionId: string = credential.unionID;
+    if (unionId === '') {
+      this.quickLoading = false;
+      promptAction.showToast({ message: '未获取到华为 UnionID，请使用华为账号登录' });
       return;
     }
     if (this.quickLoading) {
       return;
     }
     this.quickLoading = true;
-    const ctx = this.hostContext();
-    if (ctx === undefined) {
+    this.quickController.setEnabled(false);
+    Logger.info(TAG, `quick login unionId=${unionId}`);
+    AuthApi.huaweiQuickLogin(unionId, credential.openID).then((res) => {
       this.quickLoading = false;
-      promptAction.showToast({ message: '无法获取应用上下文' });
-      return;
-    }
-    HuaweiAuthService.quickLogin(ctx).then((authCode: HuaweiAuthCode) => {
-      return AuthApi.huaweiLogin(authCode.code, authCode.state);
-    }).then((res) => {
-      this.quickLoading = false;
+      this.quickController.setEnabled(true);
       if (res.code === 200 && res.data != null) {
         UserSession.saveLogin(res.data);
         Logger.info(TAG, 'quick login success');
         this.goMain();
+      } else {
+        promptAction.showToast({ message: res.msg !== '' ? res.msg : '一键登录失败' });
       }
     }).catch((err: BusinessError) => {
       this.quickLoading = false;
-      Logger.warn(TAG, `quick login fail: ${err.message}`);
-      promptAction.showToast({ message: '一键登录审核中，请使用华为账号登录' });
+      this.quickController.setEnabled(true);
+      Logger.error(TAG, `quick login request fail: ${err.message}`);
+      promptAction.showToast({ message: '网络异常，请稍后重试' });
     });
   }
 
@@ -149,20 +180,19 @@ struct LoginPage {
       .margin({ top: 110 })
 
       Column() {
-        // 一键登录（主按钮）
-        Button(this.quickLoading ? '正在登录...' : '一键登录')
+        // 一键登录（华为官方组件，LoginType.QUICK_LOGIN）
+        LoginWithHuaweiIDButton({
+          params: {
+            style: loginComponentManager.Style.BUTTON_RED,
+            loginType: loginComponentManager.LoginType.QUICK_LOGIN,
+            borderRadius: 26,
+            supportDarkMode: true
+          },
+          controller: this.quickController
+        })
           .width('100%')
-          .height(52)
-          .fontSize(17)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.text_on_brand'))
-          .backgroundColor('#CF0A2C')
-          .enabled(!this.quickLoading)
-          .onClick(() => {
-            this.onQuickLogin();
-          })
 
-        Text('未开通一键登录的企业权限前，将自动降级为华为账号登录')
+        Text('点击上方按钮，将通过华为账号授权一键登录')
           .fontSize(11)
           .fontColor($r('app.color.text_hint'))
           .width('100%')
@@ -207,6 +237,9 @@ struct LoginPage {
             .margin({ right: 6 })
             .onChange((value: boolean) => {
               this.agreed = value;
+              this.quickController.setAgreementStatus(value
+                ? loginComponentManager.AgreementStatus.ACCEPTED
+                : loginComponentManager.AgreementStatus.NOT_ACCEPTED);
             })
           Text('我已阅读并同意')
             .fontSize(12)

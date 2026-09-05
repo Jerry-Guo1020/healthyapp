@@ -55,29 +55,12 @@ export class HuaweiAuthService {
   }
 
   /**
-   * 华为账号「一键登录」（获取手机号 + UnionID，scope=quickLoginAnonymousPhone）。
-   * ⚠️ 仅企业开发者可用，需在 AGC 申请「华为账号一键登录」权限（审核约 3 工作日）；
-   * 未开通时调用会报 1001502014，前端需降级引导用户走普通华为账号登录。
+   * 华为账号「一键登录」说明：
+   * 一键登录需使用 Account Kit 提供的 LoginWithHuaweiIDButton 组件（LoginType.QUICK_LOGIN），
+   * 用户点击组件后 onClickLoginWithHuaweiIDButton 回调返回 HuaweiIDCredential（unionId/openId/authorizationCode），
+   * 前端直传 unionId 完成登录。相关逻辑已落在 LoginPage，本服务不再提供基于 executeRequest 的
+   * 一键登录（旧实现与华为官方流程不符：quickLoginAnonymousPhone scope 的 executeRequest 只返回匿名手机号，
+   * 不返回 authorizationCode）。
    */
-  static async quickLogin(context: common.Context): Promise<HuaweiAuthCode> {
-    const provider = new authentication.HuaweiIDProvider();
-    const request = provider.createAuthorizationWithHuaweiIDRequest();
-    request.scopes = ['quickLoginAnonymousPhone'];
-    const state: string = 'sh' + Date.now().toString(36);
-    request.state = state;
-
-    const controller = new authentication.AuthenticationController(context);
-    const response = (await controller.executeRequest(request)) as authentication.AuthorizationWithHuaweiIDResponse;
-    const credential = response.data;
-    if (credential === undefined || credential.authorizationCode === undefined) {
-      throw new Error('未获取到一键登录授权码');
-    }
-
-    const authCode = new HuaweiAuthCode();
-    authCode.code = credential.authorizationCode;
-    authCode.state = response.state !== undefined ? response.state : state;
-    Logger.info(TAG, 'huawei quick login code obtained');
-    return authCode;
-  }
 
 }

@@ -20,6 +20,11 @@ class HuaweiLoginBody {
   state: string = '';
 }
 
+class HuaweiQuickLoginBody {
+  unionId: string = '';
+  openId: string = '';
+}
+
 /**
  * 认证接口
  */
@@ -46,11 +51,19 @@ export class AuthApi {
     return ApiClient.post<AppLoginVo>('/auth/login-by-code', body);
   }
 
-  /** 华为账号授权码登录 */
+  /** 华为账号授权码登录（openid + profile 授权码模式） */
   static async huaweiLogin(code: string, state: string): Promise<ApiResult<AppLoginVo>> {
     const body = new HuaweiLoginBody();
     body.code = code;
     body.state = state;
+    return ApiClient.post<AppLoginVo>('/auth/huawei-login', body);
+  }
+
+  /** 华为账号一键登录（LoginWithHuaweiIDButton 组件回调直接返回 unionId/openId，无需 code） */
+  static async huaweiQuickLogin(unionId: string, openId: string): Promise<ApiResult<AppLoginVo>> {
+    const body = new HuaweiQuickLoginBody();
+    body.unionId = unionId;
+    body.openId = openId;
     return ApiClient.post<AppLoginVo>('/auth/huawei-login', body);
   }
 

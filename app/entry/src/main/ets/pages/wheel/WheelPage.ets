@@ -68,20 +68,20 @@ struct WheelPage {
       this.ctx.lineWidth = 2;
       this.ctx.stroke();
 
-      // 菜品名（沿径向从中心向外）
+      // 菜品名（沿径向从中心向外，字号 22px，名超 3 字截断以保证扇形可读）
       const mid = start + sector / 2;
       let name = this.candidates[i].name;
-      if (name.length > 4) {
-        name = name.substring(0, 4);
+      if (name.length > 3) {
+        name = name.substring(0, 3);
       }
       this.ctx.save();
       this.ctx.translate(c, c);
       this.ctx.rotate(mid);
       this.ctx.fillStyle = '#FFFFFF';
-      this.ctx.font = 'bold 18px sans-serif';
+      this.ctx.font = 'bold 22px sans-serif';
       this.ctx.textAlign = 'left';
       this.ctx.textBaseline = 'middle';
-      this.ctx.fillText(name, r * 0.52, 0);
+      this.ctx.fillText(name, r * 0.45, 0);
       this.ctx.restore();
     }
     // 中心圆点

@@ -6,6 +6,7 @@ import { UserApi, PreferenceBody, AvoidBody } from '../../service/UserApi';
 import { HealthApi } from '../../service/HealthApi';
 import { HuaweiHealthService } from '../../service/HuaweiHealthService';
 import { AvoidVo } from '../../model/ApiModels';
+import { AppIcons } from '../../common/Icons';
 
 // 健康目标选项（code + label；code 与后端 healthGoal 枚举一致）
 const GOAL_CODES: string[] = ['LOSE_FAT', 'MUSCLE_GAIN', 'STOMACH', 'SUGAR_CONTROL'];
@@ -26,6 +27,7 @@ export struct ProfileTab {
   @State nickname: string = '未登录';
   @State isGuest: number = 1;
   @State loggedIn: boolean = false;
+  @State avatarUrl: string = '';
 
   // 饮食偏好
   @State healthGoal: string = '';
@@ -72,9 +74,11 @@ export struct ProfileTab {
     if (this.loggedIn && u != null) {
       this.nickname = u.nickname;
       this.isGuest = u.isGuest;
+      this.avatarUrl = u.avatarUrl;
     } else {
       this.nickname = '未登录';
       this.isGuest = 1;
+      this.avatarUrl = '';
     }
   }
 
@@ -396,13 +400,24 @@ export struct ProfileTab {
   @Builder
   userCard() {
     Row() {
-      Text(this.loggedIn ? '👤' : '🔒')
-        .width(60)
-        .height(60)
-        .fontSize(this.loggedIn ? 30 : 26)
-        .textAlign(TextAlign.Center)
-        .backgroundColor($r('app.color.brand_bg1A'))
-        .borderRadius(30)
+      if (this.loggedIn && this.avatarUrl !== '') {
+        // 登录态：优先展示头像原图（圆形裁剪）
+        Image(this.avatarUrl)
+          .width(60)
+          .height(60)
+          .borderRadius(30)
+          .objectFit(ImageFit.Cover)
+      } else {
+        // 默认圆形头像占位：登录态 emoji / 未登录态默认人像；
+        // 正式替换为本地 PNG：resources/base/media/avatar_default.png（圆形人像）→ $r('app.media.avatar_default')
+        Text(this.loggedIn ? AppIcons.AVATAR_LOGIN : AppIcons.AVATAR_GUEST)
+          .width(60)
+          .height(60)
+          .fontSize(this.loggedIn ? 30 : 26)
+          .textAlign(TextAlign.Center)
+          .backgroundColor($r('app.color.brand_bg1A'))
+          .borderRadius(30)
+      }
       if (this.loggedIn) {
         Column() {
           Text(this.nickname)
@@ -451,7 +466,7 @@ export struct ProfileTab {
   menuCard() {
     Column() {
       Row() {
-        Text('❤️')
+        Text(AppIcons.MENU_FAVORITE)
           .fontSize(18)
         Text('我的收藏')
           .fontSize(15)
@@ -471,7 +486,7 @@ export struct ProfileTab {
       Divider().color($r('app.color.bg_divider'))
 
       Row() {
-        Text('🕒')
+        Text(AppIcons.MENU_HISTORY)
           .fontSize(18)
         Text('浏览历史')
           .fontSize(15)
@@ -491,7 +506,7 @@ export struct ProfileTab {
       Divider().color($r('app.color.bg_divider'))
 
       Row() {
-        Text('👤')
+        Text(AppIcons.MENU_ACCOUNT)
           .fontSize(18)
         Text('用户管理')
           .fontSize(15)

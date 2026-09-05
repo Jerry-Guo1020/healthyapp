@@ -3,6 +3,7 @@ import { BizApi, DishQuery } from '../../service/BizApi';
 import { CategoryVo, DishVo } from '../../model/ApiModels';
 import { DishCard } from '../../components/DishCard';
 import { EmptyView } from '../../components/EmptyView';
+import { AppIcons } from '../../common/Icons';
 
 /**
  * 首页 Tab：搜索 + 分类 + 菜品列表
@@ -104,7 +105,7 @@ export struct HomeTab {
       .padding({ left: 16, right: 16, top: 14, bottom: 10 })
 
       Row() {
-        Text('🔍')
+        Text(AppIcons.SEARCH)
           .fontSize(15)
         Text('搜索菜品名称')
           .fontSize(14)

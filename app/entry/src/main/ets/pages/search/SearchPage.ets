@@ -3,6 +3,7 @@ import { BizApi, DishQuery } from '../../service/BizApi';
 import { DishVo } from '../../model/ApiModels';
 import { DishCard } from '../../components/DishCard';
 import { EmptyView } from '../../components/EmptyView';
+import { AppIcons } from '../../common/Icons';
 
 /**
  * 搜索页：独立搜索界面，支持关键词搜索 + 一键清除 + 结果分页展示。
@@ -79,7 +80,7 @@ struct SearchPage {
             router.back();
           })
         Row() {
-          Text('🔍')
+          Text(AppIcons.SEARCH)
             .fontSize(15)
           TextInput({ placeholder: '搜索菜品名称', text: this.keyword, controller: this.searchCtrl })
             .layoutWeight(1)

@@ -77,17 +77,44 @@ public class AppAuthServiceImpl implements IAppAuthService {
 
     @Override
     public AppLoginVo huaweiLogin(HuaweiLoginBo bo) {
-        if (bo == null || StrUtil.isBlank(bo.getCode())) {
-            throw new ServiceException("缺少华为授权码");
+        if (bo == null) {
+            throw new ServiceException("请求参数不能为空");
         }
-        HuaweiAccountClient.HuaweiUser hu = huaweiAccountClient.login(bo.getCode());
-        if (hu == null || StrUtil.isBlank(hu.getUnionId())) {
-            throw new ServiceException("获取华为用户信息失败，请确认已开通账号服务并勾选 openid 权限");
+        String unionId = bo.getUnionId();
+        String openId = bo.getOpenId();
+        String nickname = bo.getNickname();
+        String avatarUrl = bo.getAvatarUrl();
+        String phone = null;
+
+        // 普通华为账号登录（openid + profile 授权码模式）：后端用 code 换 token 读用户信息
+        if (StrUtil.isNotBlank(bo.getCode())) {
+            HuaweiAccountClient.HuaweiUser hu = huaweiAccountClient.login(bo.getCode());
+            if (hu == null || StrUtil.isBlank(hu.getUnionId())) {
+                throw new ServiceException("获取华为用户信息失败，请确认已开通账号服务并勾选 openid 权限");
+            }
+            unionId = hu.getUnionId();
+            openId = StrUtil.blankToDefault(hu.getOpenId(), openId);
+            nickname = StrUtil.blankToDefault(hu.getNickname(), nickname);
+            avatarUrl = StrUtil.blankToDefault(hu.getAvatarUrl(), avatarUrl);
+            phone = hu.getPhone();
         }
+
+        // 一键登录（LoginWithHuaweiIDButton 组件）：前端回传 unionId，无需 code 换 token
+        if (StrUtil.isBlank(unionId)) {
+            throw new ServiceException("缺少华为授权码或 UnionID");
+        }
+
+        // lambda 内需使用 effectively final 变量，这里拷贝为 final 副本
+        final String finalUnionId = unionId;
+        final String finalOpenId = openId;
+        final String finalNickname = nickname;
+        final String finalAvatarUrl = avatarUrl;
+        final String finalPhone = phone;
+
         // 按 UnionID 查历史绑定
         ShUserAuth auth = userAuthMapper.selectOne(new LambdaQueryWrapper<ShUserAuth>()
             .eq(ShUserAuth::getAuthType, "HUAWEI")
-            .eq(ShUserAuth::getUnionId, hu.getUnionId())
+            .eq(ShUserAuth::getUnionId, finalUnionId)
             .eq(ShUserAuth::getStatus, 1)
             .last("limit 1"));
         ShUser user;
@@ -98,17 +125,17 @@ public class AppAuthServiceImpl implements IAppAuthService {
             }
         } else {
             user = new ShUser();
-            user.setNickname(StrUtil.blankToDefault(hu.getNickname(), "华为用户"));
-            user.setAvatarUrl(hu.getAvatarUrl());
+            user.setNickname(StrUtil.blankToDefault(finalNickname, "华为用户"));
+            user.setAvatarUrl(finalAvatarUrl);
             user.setIsGuest(0);
             user.setStatus(1);
             // 华为返回手机号时：已存在同手机号用户则合并，否则写入
-            if (StrUtil.isNotBlank(hu.getPhone())) {
-                ShUser exist = userMapper.selectOne(new LambdaQueryWrapper<ShUser>().eq(ShUser::getPhone, hu.getPhone()));
+            if (StrUtil.isNotBlank(finalPhone)) {
+                ShUser exist = userMapper.selectOne(new LambdaQueryWrapper<ShUser>().eq(ShUser::getPhone, finalPhone));
                 if (exist != null) {
                     user = exist;
                 } else {
-                    user.setPhone(hu.getPhone());
+                    user.setPhone(finalPhone);
                 }
             }
             if (user.getId() == null) {
@@ -117,9 +144,9 @@ public class AppAuthServiceImpl implements IAppAuthService {
             ShUserAuth newAuth = new ShUserAuth();
             newAuth.setUserId(user.getId());
             newAuth.setAuthType("HUAWEI");
-            newAuth.setOpenId(hu.getOpenId());
-            newAuth.setUnionId(hu.getUnionId());
-            newAuth.setPhone(hu.getPhone());
+            newAuth.setOpenId(finalOpenId);
+            newAuth.setUnionId(finalUnionId);
+            newAuth.setPhone(finalPhone);
             newAuth.setStatus(1);
             newAuth.setBindTime(new Date());
             userAuthMapper.insert(newAuth);
