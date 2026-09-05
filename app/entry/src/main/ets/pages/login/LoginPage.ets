@@ -27,6 +27,7 @@ struct LoginPage {
   @State huaweiLoading: boolean = false;
   @State guestLoading: boolean = false;
   @State agreed: boolean = false;
+  @State anonymousPhone: string = '';
 
   /** 一键登录按钮 controller（协议状态 + 点击回调），回调在 aboutToAppear 里绑定 */
   private quickController: loginComponentManager.LoginWithHuaweiIDButtonController =
@@ -66,6 +67,23 @@ struct LoginPage {
         credential: loginComponentManager.HuaweiIDCredential): void => {
         this.handleQuickLogin(error, credential);
       });
+    this.fetchAnonymousPhone();
+  }
+
+  /** 拉取一键登录匿名手机号（打码态），拿不到仅不展示不阻断 */
+  private fetchAnonymousPhone(): void {
+    const ctx = this.hostContext();
+    if (ctx === undefined) {
+      return;
+    }
+    HuaweiAuthService.getQuickLoginAnonymousPhone(ctx).then((phone: string) => {
+      if (phone !== '') {
+        this.anonymousPhone = phone;
+        Logger.info(TAG, `anonymous phone obtained: ${phone}`);
+      }
+    }).catch((err: BusinessError) => {
+      Logger.error(TAG, `get anonymous phone fail: ${err.message}`);
+    });
   }
 
   /** 华为账号一键登录：组件回调返回 unionId/openId，直传后端登录 */
@@ -181,6 +199,23 @@ struct LoginPage {
       .margin({ top: 110 })
 
       Column() {
+        // 匿名手机号展示（华为一键登录 UX 规范：展示从华为账号侧获取的打码手机号）
+        if (this.anonymousPhone !== '') {
+          Column() {
+            Text(this.anonymousPhone)
+              .fontSize(28)
+              .fontWeight(FontWeight.Bold)
+              .fontColor($r('app.color.text_main'))
+            Text('华为账号绑定号码')
+              .fontSize(12)
+              .fontColor($r('app.color.text_sub'))
+              .margin({ top: 4 })
+          }
+          .width('100%')
+          .alignItems(HorizontalAlign.Center)
+          .margin({ bottom: 16 })
+        }
+
         // 一键登录（华为官方组件，LoginType.QUICK_LOGIN）
         LoginWithHuaweiIDButton({
           params: {

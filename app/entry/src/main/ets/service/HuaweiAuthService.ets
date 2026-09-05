@@ -55,6 +55,32 @@ export class HuaweiAuthService {
   }
 
   /**
+   * 获取一键登录匿名手机号（用于登录页展示，打码形态如 137****1234）。
+   * <p>
+   * 仅企业开发者（已开通“华为账号一键登录”权限，scope quickLoginAnonymousPhone）可用：
+   * 拿不到（返回空串）时登录页降级为不展示匿名手机号，不阻断登录。
+   */
+  static async getQuickLoginAnonymousPhone(context: common.Context): Promise<string> {
+    const provider = new authentication.HuaweiIDProvider();
+    const request = provider.createAuthorizationWithHuaweiIDRequest();
+    // 只申请一键登录匿名手机号 scope
+    request.scopes = ['quickLoginAnonymousPhone'];
+    // 一键登录场景 forceAuthorization 必须为 false
+    request.forceAuthorization = false;
+    request.state = 'ql' + Date.now().toString(36);
+
+    const controller = new authentication.AuthenticationController(context);
+    const response = (await controller.executeRequest(request)) as authentication.AuthorizationWithHuaweiIDResponse;
+    const phoneObj: Object | undefined = response.data?.extraInfo?.quickLoginAnonymousPhone;
+    if (phoneObj === undefined) {
+      return '';
+    }
+    const phone: string = phoneObj as string;
+    Logger.info(TAG, 'quick login anonymous phone obtained');
+    return phone;
+  }
+
+  /**
    * 华为账号「一键登录」说明：
    * 一键登录需使用 Account Kit 提供的 LoginWithHuaweiIDButton 组件（LoginType.QUICK_LOGIN），
    * 用户点击组件后 onClickLoginWithHuaweiIDButton 回调返回 HuaweiIDCredential（unionId/openId/authorizationCode），
