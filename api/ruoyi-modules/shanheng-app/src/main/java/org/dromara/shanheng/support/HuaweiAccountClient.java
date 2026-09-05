@@ -89,7 +89,18 @@ public class HuaweiAccountClient {
         JSONObject json = JSONUtil.parseObj(body);
         String unionId = json.getStr("unionId");
         if (StrUtil.isBlank(unionId)) {
-            throw new ServiceException("华为一键登录获取手机号失败：" + json.getStr("error_description", body));
+            // 华为服务端错误字段为 resultCode/resultDesc（非 error/error_description）
+            String rc = json.getStr("resultCode", "");
+            String rd = json.getStr("resultDesc", json.getStr("error_description", ""));
+            StringBuilder msg = new StringBuilder("华为一键登录获取手机号失败");
+            if (StrUtil.isNotBlank(rc)) {
+                msg.append("（resultCode=").append(rc).append("）");
+            }
+            if (StrUtil.isNotBlank(rd)) {
+                msg.append("：").append(rd);
+            }
+            msg.append("。请检查 SHANHENG_HUAWEI_CLIENT_ID/CLIENT_SECRET 是否为 AGC「华为账号服务」的 client_id/client_secret");
+            throw new ServiceException(msg.toString());
         }
         HuaweiUser user = new HuaweiUser();
         user.setOpenId(json.getStr("openId"));
