@@ -37,6 +37,9 @@ public class HuaweiAccountClient {
     @Value("${shanheng.huawei.userinfo-url:https://oauth-login.cloud.huawei.com/rest.php?nsp_svc=GOpen.oauth2.user.getTokenInfo}")
     private String userinfoUrl;
 
+    @Value("${shanheng.huawei.quick-login-url:https://account-api.cloud.huawei.com/oauth2/v6/quickLogin/getPhoneNumber}")
+    private String quickLoginUrl;
+
     /** 华为用户信息 */
     @Data
     public static class HuaweiUser {
@@ -56,6 +59,44 @@ public class HuaweiAccountClient {
         }
         String accessToken = exchangeToken(code);
         return fetchUser(accessToken);
+    }
+
+    /**
+     * 一键登录（LoginWithHuaweiIDButton 组件）：AuthorizationCode 换完整手机号 + UnionID/OpenID。
+     * <p>
+     * 对应华为服务端接口 <a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-references/account-api-get-user-info-quicklogin-by-code">/oauth2/v6/quickLogin/getPhoneNumber</a>：
+     * <ul>
+     *   <li>请求 Content-Type: application/json，body = {code, clientId, clientSecret}</li>
+     *   <li>响应字段：openId / unionId / phoneNumber（带国家码）/ phoneNumberValid / purePhoneNumber（纯号）/ phoneCountryCode</li>
+     * </ul>
+     * 仅企业开发者（已开通“华为账号一键登录”权限）可用，返回的完整手机号用于账号绑定与合并。
+     */
+    public HuaweiUser quickLoginByCode(String code) {
+        if (StrUtil.isBlank(clientId) || StrUtil.isBlank(clientSecret)) {
+            throw new ServiceException("华为账号服务未配置（client_id/client_secret 为空）");
+        }
+        JSONObject req = new JSONObject();
+        req.set("code", code);
+        req.set("clientId", clientId);
+        req.set("clientSecret", clientSecret);
+        String body = HttpRequest.post(quickLoginUrl)
+            .contentType("application/json")
+            .body(req.toString())
+            .timeout(20000)
+            .execute()
+            .body();
+        log.info("huawei quickLogin getPhoneNumber resp={}", body);
+        JSONObject json = JSONUtil.parseObj(body);
+        String unionId = json.getStr("unionId");
+        if (StrUtil.isBlank(unionId)) {
+            throw new ServiceException("华为一键登录获取手机号失败：" + json.getStr("error_description", body));
+        }
+        HuaweiUser user = new HuaweiUser();
+        user.setOpenId(json.getStr("openId"));
+        user.setUnionId(unionId);
+        // 优先取纯手机号（不含国家码），兼容回退到带国家码的 phoneNumber
+        user.setPhone(StrUtil.blankToDefault(json.getStr("purePhoneNumber"), json.getStr("phoneNumber")));
+        return user;
     }
 
     private String exchangeToken(String code) {

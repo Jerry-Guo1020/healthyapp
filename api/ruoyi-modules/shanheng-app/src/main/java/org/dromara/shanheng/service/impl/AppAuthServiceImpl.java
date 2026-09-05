@@ -86,8 +86,17 @@ public class AppAuthServiceImpl implements IAppAuthService {
         String avatarUrl = bo.getAvatarUrl();
         String phone = null;
 
-        // 普通华为账号登录（openid + profile 授权码模式）：后端用 code 换 token 读用户信息
-        if (StrUtil.isNotBlank(bo.getCode())) {
+        // 一键登录（LoginWithHuaweiIDButton 组件）：授权码换完整手机号 + UnionID/OpenID
+        if (StrUtil.isNotBlank(bo.getAuthorizationCode())) {
+            HuaweiAccountClient.HuaweiUser hu = huaweiAccountClient.quickLoginByCode(bo.getAuthorizationCode());
+            if (hu == null || StrUtil.isBlank(hu.getUnionId())) {
+                throw new ServiceException("华为一键登录获取手机号失败，请确认已完成企业开发者认证并开通一键登录权限");
+            }
+            unionId = hu.getUnionId();
+            openId = StrUtil.blankToDefault(hu.getOpenId(), openId);
+            phone = hu.getPhone();
+        } else if (StrUtil.isNotBlank(bo.getCode())) {
+            // 普通华为账号登录（openid + profile 授权码模式）：后端用 code 换 token 读用户信息
             HuaweiAccountClient.HuaweiUser hu = huaweiAccountClient.login(bo.getCode());
             if (hu == null || StrUtil.isBlank(hu.getUnionId())) {
                 throw new ServiceException("获取华为用户信息失败，请确认已开通账号服务并勾选 openid 权限");
@@ -99,7 +108,7 @@ public class AppAuthServiceImpl implements IAppAuthService {
             phone = hu.getPhone();
         }
 
-        // 一键登录（LoginWithHuaweiIDButton 组件）：前端回传 unionId，无需 code 换 token
+        // 兼容旧版直登：前端仅回传 unionId 时（无授权码/code）直接按 UnionID 登录
         if (StrUtil.isBlank(unionId)) {
             throw new ServiceException("缺少华为授权码或 UnionID");
         }

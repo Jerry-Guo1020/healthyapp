@@ -21,6 +21,7 @@ class HuaweiLoginBody {
 }
 
 class HuaweiQuickLoginBody {
+  authorizationCode: string = '';
   unionId: string = '';
   openId: string = '';
 }
@@ -59,9 +60,10 @@ export class AuthApi {
     return ApiClient.post<AppLoginVo>('/auth/huawei-login', body);
   }
 
-  /** 华为账号一键登录（LoginWithHuaweiIDButton 组件回调直接返回 unionId/openId，无需 code） */
-  static async huaweiQuickLogin(unionId: string, openId: string): Promise<ApiResult<AppLoginVo>> {
+  /** 华为账号一键登录（LoginWithHuaweiIDButton 组件回调返回 authorizationCode + unionId/openId） */
+  static async huaweiQuickLogin(authorizationCode: string, unionId: string, openId: string): Promise<ApiResult<AppLoginVo>> {
     const body = new HuaweiQuickLoginBody();
+    body.authorizationCode = authorizationCode;
     body.unionId = unionId;
     body.openId = openId;
     return ApiClient.post<AppLoginVo>('/auth/huawei-login', body);

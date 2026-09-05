@@ -96,8 +96,9 @@ struct LoginPage {
     }
     this.quickLoading = true;
     this.quickController.setEnabled(false);
-    Logger.info(TAG, `quick login unionId=${unionId}`);
-    AuthApi.huaweiQuickLogin(unionId, credential.openID).then((res) => {
+    const authorizationCode: string = credential.authorizationCode ?? '';
+    Logger.info(TAG, `quick login unionId=${unionId}, hasAuthCode=${authorizationCode !== ''}`);
+    AuthApi.huaweiQuickLogin(authorizationCode, unionId, credential.openID).then((res) => {
       this.quickLoading = false;
       this.quickController.setEnabled(true);
       if (res.code === 200 && res.data != null) {
